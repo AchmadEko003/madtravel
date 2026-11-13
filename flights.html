@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bandingkan Tiket Pesawat (Jakarta ➔ Bali) — MadTravel Metasearch</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .flights-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 24px;
+    }
+
+    /* Filter Sidebar */
+    .filter-sidebar {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      padding: 20px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .filter-group {
+      padding: 16px 0;
+      border-bottom: 1.5px dashed var(--border-color);
+    }
+
+    .filter-group:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .filter-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .check-row input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--coral);
+      cursor: pointer;
+    }
+
+    /* Date Price Ribbon */
+    .date-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .date-pill {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .date-pill:hover {
+      border-color: var(--border-bold);
+      transform: translateY(-2px);
+    }
+
+    .date-pill.active {
+      background: var(--sunny);
+      border-color: var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    /* Sort Tabs */
+    .sort-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .sort-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+    }
+
+    .sort-card.active {
+      background: var(--bg-ocean-tint);
+      border: 2px solid var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    /* Flight Result Card */
+    .flight-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .flight-main {
+      display: grid;
+      grid-template-columns: 1.1fr 1.5fr 1.2fr;
+      gap: 20px;
+      padding: 22px;
+      align-items: center;
+    }
+
+    .airline-logo-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: 2px solid var(--border-bold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .route-timeline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .route-line {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .route-line-bar {
+      height: 3px;
+      background: var(--border-bold);
+      border-radius: 99px;
+      position: relative;
+      margin: 6px 0;
+    }
+
+    .route-line-bar::after {
+      content: '✈️';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-card);
+      padding: 0 6px;
+      font-size: 0.9rem;
+    }
+
+    .ota-deal-box {
+      border-left: 2px dashed var(--border-color);
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Expandable Multi-OTA Matrix Drawer */
+    .ota-drawer {
+      display: none;
+      background: var(--bg-sand-alt);
+      border-top: 2px solid var(--border-bold);
+      padding: 20px 22px;
+    }
+
+    .ota-drawer.open {
+      display: block;
+    }
+
+    .ota-matrix-row {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 1.3fr 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .ota-matrix-row.cheapest {
+      border-color: var(--lime);
+      background: var(--bg-lime-tint);
+    }
+
+    @media (max-width: 980px) {
+      .flights-layout {
+        grid-template-columns: 1fr;
+      }
+      .filter-sidebar {
+        position: static;
+      }
+      .flight-main {
+        grid-template-columns: 1fr;
+      }
+      .ota-deal-box {
+        border-left: none;
+        border-top: 2px dashed var(--border-color);
+        padding-left: 0;
+        padding-top: 16px;
+        align-items: stretch;
+      }
+      .date-strip {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .ota-matrix-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">⚡ LIVE METASEARCH</span>
+        <span>Memindai <strong>28 Maskapai & 14 Situs OTA</strong> untuk rute Jakarta (CGK) ➔ Bali (DPS)</span>
+      </div>
+      <div class="top-promo-utils">
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✈️</div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link active">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">📈 Price Alert <span class="nav-badge">PRO</span></a>
+        <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="price-alerts.html" class="btn btn-outline btn-sm">🔔 Alert Rute Ini</a>
+        <a href="pricing.html" class="btn btn-primary btn-sm">Upgrade Pro</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 28px;">
+    <!-- Compact Modify Search Header -->
+    <div class="metasearch-box" style="padding: 18px 22px;">
+      <form id="flight-search-form" onsubmit="event.preventDefault(); showToast('Memperbarui Metasearch...', 'Harga terbaru dari 14 OTA berhasil disinkronkan!', 'turquoise');">
+        <div class="search-Input-grid">
+          <div class="search-field">
+            <div class="search-field-label">🛫 Dari</div>
+            <input type="text" class="search-field-input" data-field="origin" value="Jakarta (CGK)" />
+            <div class="search-field-sub" data-sub="origin">Semua Bandara Jakarta</div>
+          </div>
+          <button type="button" class="swap-route-btn" title="Tukar Rute">⇄</button>
+          <div class="search-field">
+            <div class="search-field-label">🛬 Tujuan</div>
+            <input type="text" class="search-field-input" data-field="destination" value="Denpasar, Bali (DPS)" />
+            <div class="search-field-sub" data-sub="destination">I Gusti Ngurah Rai Intl</div>
+          </div>
+          <div class="search-field">
+            <div class="search-field-label">📅 Tanggal Keberangkatan</div>
+            <input type="text" class="search-field-input" value="Jum, 18 Des 2026" />
+            <div class="search-field-sub">Sekali Jalan • Ekonomi</div>
+          </div>
+          <div class="search-field">
+            <div class="search-field-label">🧳 Kalkulator Bagasi</div>
+            <select id="baggage-select" class="search-field-input" style="background:transparent; cursor:pointer;">
+              <option value="0">Hanya Kabin 7kg (+Rp 0)</option>
+              <option value="185000">Tambah Bagasi 20kg (+Rp 185rb)</option>
+              <option value="310000">Tambah Bagasi 30kg (+Rp 310rb)</option>
+            </select>
+            <div class="search-field-sub">Otomatis hitung ke semua OTA</div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="height: 100%; min-height: 62px;">🔄 Update Harga</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="flights-layout">
+      <!-- Left Filter Sidebar -->
+      <aside class="filter-sidebar">
+        <!-- AI Buy or Wait Predictor Card -->
+        <div style="background: var(--bg-ocean-tint); border: 2px solid var(--border-bold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px; box-shadow: var(--shadow-pop-sm);">
+          <div class="flex items-center justify-between" style="margin-bottom: 6px;">
+            <span class="badge badge-sunny">🤖 AI FARE PREDICTOR</span>
+            <span style="font-weight: 800; font-size: 0.78rem; color: var(--turquoise-dark);">95% Yakin</span>
+          </div>
+          <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">🔥 Beli Sekarang!</div>
+          <p style="font-size: 0.78rem; color: var(--text-slate); margin-bottom: 10px;">
+            Harga saat ini <strong>Rp 180.000 lebih murah</strong> dibanding rata-rata bulan Desember. Diprediksi naik dalam 14 jam.
+          </p>
+          <button class="btn btn-turquoise btn-sm" style="width: 100%;" onclick="showToast('WhatsApp Alert Aktif!', 'Kami akan memberi tahu Anda jika harga rute CGK-DPS berubah.', 'lime')">
+            🔔 Pantau Rute Ini via WA
+          </button>
+        </div>
+
+        <!-- Filter: Transit -->
+        <div class="filter-group">
+          <div class="filter-title">
+            <span>🛑 Jumlah Transit</span>
+            <button class="btn-ghost" style="font-size: 0.75rem; padding: 2px 6px;" onclick="resetFlightFilters()">Reset</button>
+          </div>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-stop" value="direct" checked /> Langsung (Non-stop)</span>
+            <span class="badge badge-lime">Mulai 790rb</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-stop" value="1stop" checked /> 1x Transit</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Mulai 940rb</span>
+          </label>
+        </div>
+
+        <!-- Filter: Max Price Range -->
+        <div class="filter-group">
+          <div class="filter-title">
+            <span>💰 Batas Harga Maksimal</span>
+            <span id="price-slider-label" class="text-price" style="color: var(--coral); font-size: 0.85rem;">Rp 2.500.000</span>
+          </div>
+          <input type="range" id="price-range-slider" min="800000" max="2500000" step="50000" value="2500000" style="width: 100%; accent-color: var(--coral); cursor: pointer;" />
+          <div class="flex justify-between" style="font-size: 0.74rem; color: var(--text-muted); margin-top: 4px;">
+            <span>Rp 800rb</span>
+            <span>Rp 2,5 Juta</span>
+          </div>
+        </div>
+
+        <!-- Filter: Airlines -->
+        <div class="filter-group">
+          <div class="filter-title">✈️ Maskapai Penerbangan</div>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-airline" value="AirAsia" checked /> Indonesia AirAsia</span>
+            <span style="font-size: 0.76rem; color: var(--text-slate);">Rp 790rb</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-airline" value="Citilink" checked /> Citilink Indonesia</span>
+            <span style="font-size: 0.76rem; color: var(--text-slate);">Rp 890rb</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-airline" value="Pelita" checked /> Pelita Air</span>
+            <span style="font-size: 0.76rem; color: var(--text-slate);">Rp 965rb</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-airline" value="Garuda" checked /> Garuda Indonesia</span>
+            <span style="font-size: 0.76rem; color: var(--text-slate);">Rp 1,48 Jt</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" class="filter-airline" value="Batik" checked /> Batik Air</span>
+            <span style="font-size: 0.76rem; color: var(--text-slate);">Rp 1,12 Jt</span>
+          </label>
+        </div>
+
+        <!-- Filter: Situs OTA -->
+        <div class="filter-group">
+          <div class="filter-title">🏪 Situs Booking (OTA)</div>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" checked /> Tiket.com</span>
+            <span class="badge badge-lime" style="font-size:0.68rem;">3 Termurah</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" checked /> Traveloka</span>
+            <span class="badge badge-turquoise" style="font-size:0.68rem;">Kupon Kartu</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" checked /> Trip.com</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" checked /> Agoda Flights</span>
+          </label>
+          <label class="check-row">
+            <span class="flex items-center gap-2"><input type="checkbox" checked /> Website Resmi Maskapai</span>
+          </label>
+        </div>
+      </aside>
+
+      <!-- Right Main Results Column -->
+      <section>
+        <!-- 7-Day Cheapest Date Ribbon -->
+        <div class="date-strip" id="date-strip">
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Sel, 15 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="920000">Rp 920.000</div>
+          </div>
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Rab, 16 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="840000">Rp 840.000</div>
+          </div>
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Kam, 17 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="865000">Rp 865.000</div>
+          </div>
+          <div class="date-pill active" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; font-weight: 800;">Jum, 18 Des 🔥</div>
+            <div class="text-price" style="font-size: 0.85rem; color: var(--lime-dark); margin-top: 2px;" data-idr="790000">Rp 790.000</div>
+          </div>
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Sab, 19 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="1150000">Rp 1.150.000</div>
+          </div>
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Min, 20 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="1080000">Rp 1.080.000</div>
+          </div>
+          <div class="date-pill" onclick="selectDatePill(this)">
+            <div style="font-size: 0.74rem; color: var(--text-slate);">Sen, 21 Des</div>
+            <div class="text-price" style="font-size: 0.85rem; margin-top: 2px;" data-idr="890000">Rp 890.000</div>
+          </div>
+        </div>
+
+        <!-- Sort Cards (Termurah / Terbaik / Tercepat) -->
+        <div class="sort-bar">
+          <button class="sort-card active" data-sort="best" onclick="sortFlights('best', this)">
+            <div class="flex justify-between items-center">
+              <span style="font-weight: 800; font-size: 0.9rem;">🏆 Rekomendasi Terbaik</span>
+              <span class="badge badge-turquoise">AI Pick</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-slate); margin-top: 4px;">Skor waktu & harga paling optimal</div>
+          </button>
+
+          <button class="sort-card" data-sort="cheapest" onclick="sortFlights('cheapest', this)">
+            <div class="flex justify-between items-center">
+              <span style="font-weight: 800; font-size: 0.9rem;">💸 Paling Murah</span>
+              <span class="text-price" style="color: var(--lime-dark); font-size: 0.85rem;" data-idr="790000">Rp 790.000</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-slate); margin-top: 4px;">Diadu dari 14 situs OTA</div>
+          </button>
+
+          <button class="sort-card" data-sort="fastest" onclick="sortFlights('fastest', this)">
+            <div class="flex justify-between items-center">
+              <span style="font-weight: 800; font-size: 0.9rem;">⚡ Paling Cepat</span>
+              <span style="font-weight: 700; font-size: 0.82rem;">1j 50m</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-slate); margin-top: 4px;">Penerbangan langsung tepat waktu</div>
+          </button>
+        </div>
+
+        <!-- Dynamic Flight Cards Container -->
+        <div id="flight-results-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel Metasearch Engine • Harga diperbarui secara real-time dari partner OTA resmi.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="hotels.html">Cek Hotel di Bali</a>
+        <a href="ai-planner.html">Susun Itinerary Bali</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const flightsCatalog = [
+      {
+        id: 'fl-1',
+        airline: 'AirAsia',
+        airlineFull: 'Indonesia AirAsia',
+        flightCode: 'QZ-7520 • Airbus A320',
+        badgeColor: '#FF385C',
+        logoText: 'QZ',
+        depTime: '07:15',
+        arrTime: '10:05',
+        durationMin: 110,
+        durationText: '1j 50m',
+        stopType: 'direct',
+        stopText: 'Langsung',
+        baggageIncluded: 'Kabin 7kg',
+        score: 96,
+        tag: '🔥 TERMURAH HARI INI',
+        otas: [
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 790000, perk: 'Gratis Kupon TixPoint + Instan e-Tiket', cheapest: true },
+          { name: 'AirAsia MOVE', style: 'ota-direct', basePrice: 815000, perk: 'Harga Resmi Maskapai • Bisa Pilih Kursi' },
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 845000, perk: 'Bisa PayLater & Cicilan 0%' },
+          { name: 'Trip.com', style: 'ota-trip', basePrice: 880000, perk: 'Termasuk Asuransi Keterlambatan' },
+          { name: 'Agoda Flights', style: 'ota-agoda', basePrice: 910000, perk: 'Diskon Bundling Hotel Bali 15%' }
+        ]
+      },
+      {
+        id: 'fl-2',
+        airline: 'Citilink',
+        airlineFull: 'Citilink Indonesia',
+        flightCode: 'QG-684 • Airbus A320neo',
+        badgeColor: '#10B981',
+        logoText: 'QG',
+        depTime: '09:30',
+        arrTime: '12:20',
+        durationMin: 110,
+        durationText: '1j 50m',
+        stopType: 'direct',
+        stopText: 'Langsung',
+        baggageIncluded: 'Kabin 7kg + Bagasi 15kg',
+        score: 99,
+        tag: '🏆 BEST VALUE (TERMASUK BAGASI)',
+        otas: [
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 890000, perk: 'Termasuk Bagasi 15kg + Promo Kartu Kredit', cheapest: true },
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 925000, perk: 'Termasuk Bagasi 15kg • Refundable' },
+          { name: 'Trip.com', style: 'ota-trip', basePrice: 950000, perk: 'Termasuk Bagasi 15kg' },
+          { name: 'Citilink Web', style: 'ota-direct', basePrice: 980000, perk: 'Gratis LinkMiles 250 Poin' }
+        ]
+      },
+      {
+        id: 'fl-3',
+        airline: 'Pelita',
+        airlineFull: 'Pelita Air Service',
+        flightCode: 'IP-102 • Airbus A320',
+        badgeColor: '#0284C7',
+        logoText: 'IP',
+        depTime: '13:10',
+        arrTime: '15:55',
+        durationMin: 105,
+        durationText: '1j 45m',
+        stopType: 'direct',
+        stopText: 'Langsung',
+        baggageIncluded: 'Kabin 7kg + Bagasi 20kg + Snack',
+        score: 95,
+        tag: '🥐 GRATIS ROTI & BAGASI 20KG',
+        otas: [
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 965000, perk: 'Termasuk Bagasi 20kg + Snack Hangat', cheapest: true },
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 990000, perk: 'Termasuk Bagasi 20kg + Reschedule Mudah' },
+          { name: 'Pelita Direct', style: 'ota-direct', basePrice: 1020000, perk: 'Bebas Pilih Kursi Baris Depan' }
+        ]
+      },
+      {
+        id: 'fl-4',
+        airline: 'Batik',
+        airlineFull: 'Batik Air',
+        flightCode: 'ID-6506 • Boeing 737-800',
+        badgeColor: '#7C3AED',
+        logoText: 'ID',
+        depTime: '16:40',
+        arrTime: '20:55',
+        durationMin: 195,
+        durationText: '3j 15m',
+        stopType: '1stop',
+        stopText: '1x Transit (SUB)',
+        baggageIncluded: 'Kabin 7kg + Bagasi 20kg + Layar Hiburan',
+        score: 84,
+        tag: '🎬 IN-FLIGHT ENTERTAINMENT',
+        otas: [
+          { name: 'Trip.com', style: 'ota-trip', basePrice: 1120000, perk: 'Harga Promo Flash Sale Sore', cheapest: true },
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 1185000, perk: 'Termasuk Bagasi 20kg' },
+          { name: 'Agoda Flights', style: 'ota-agoda', basePrice: 1230000, perk: 'Cashback AgodaCash Rp 50rb' }
+        ]
+      },
+      {
+        id: 'fl-5',
+        airline: 'Garuda',
+        airlineFull: 'Garuda Indonesia',
+        flightCode: 'GA-408 • Boeing 777-300ER',
+        badgeColor: '#0F2942',
+        logoText: 'GA',
+        depTime: '11:00',
+        arrTime: '13:50',
+        durationMin: 110,
+        durationText: '1j 50m',
+        stopType: 'direct',
+        stopText: 'Langsung',
+        baggageIncluded: 'Kabin 7kg + Bagasi 30kg + Makanan Lengkap',
+        score: 98,
+        tag: '👑 PESAWAT WIDE-BODY B777 • 5-STAR',
+        otas: [
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 1480000, perk: 'Hemat Rp 290rb dari Harga Normal!', cheapest: true },
+          { name: 'Garuda Direct', style: 'ota-direct', basePrice: 1560000, perk: '+800 GarudaMiles • Bebas Pilih Kursi' },
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 1595000, perk: 'Gratis Akses Lounge Bandara CGK' },
+          { name: 'Trip.com', style: 'ota-trip', basePrice: 1770000, perk: 'Full Refundable Ticket' }
+        ]
+      }
+    ];
+
+    let currentSort = 'best';
+
+    function renderFlights() {
+      const container = document.getElementById('flight-results-list');
+      if (!container) return;
+
+      const baggageAdd = parseInt(document.getElementById('baggage-select')?.value || '0', 10);
+      const maxPrice = parseInt(document.getElementById('price-range-slider')?.value || '2500000', 10);
+      const checkedStops = Array.from(document.querySelectorAll('.filter-stop:checked')).map(i => i.value);
+      const checkedAirlines = Array.from(document.querySelectorAll('.filter-airline:checked')).map(i => i.value);
+
+      let filtered = flightsCatalog.filter(fl => {
+        const lowest = fl.otas[0].basePrice + baggageAdd;
+        return lowest <= maxPrice &&
+               checkedStops.includes(fl.stopType) &&
+               checkedAirlines.includes(fl.airline);
+      });
+
+      if (currentSort === 'cheapest') {
+        filtered.sort((a, b) => a.otas[0].basePrice - b.otas[0].basePrice);
+      } else if (currentSort === 'fastest') {
+        filtered.sort((a, b) => a.durationMin - b.durationMin);
+      } else {
+        filtered.sort((a, b) => b.score - a.score);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card-pop" style="text-align:center; padding: 48px 24px;">
+            <div style="font-size: 3rem;">🏖️</div>
+            <h3 class="title-h3" style="margin: 10px 0;">Tidak Ada Penerbangan yang Sesuai Filter</h3>
+            <p style="color: var(--text-slate); margin-bottom: 18px;">Coba naikkan batas harga maksimal atau aktifkan kembali semua maskapai.</p>
+            <button class="btn btn-primary btn-sm" onclick="resetFlightFilters()">Reset Semua Filter</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map((fl, idx) => {
+        const bestOta = fl.otas[0];
+        const highestOta = fl.otas[fl.otas.length - 1];
+        const lowestTotal = bestOta.basePrice + baggageAdd;
+        const savings = (highestOta.basePrice - bestOta.basePrice);
+
+        return `
+          <article class="flight-card">
+            <div style="background: var(--bg-sand); border-bottom: 1.5px solid var(--border-color); padding: 8px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span class="badge badge-sunny" style="font-size: 0.72rem;">${fl.tag}</span>
+              <span style="font-size: 0.78rem; font-weight: 700; color: var(--lime-dark);">
+                💡 Hemat <strong>${formatMoney(savings)}</strong> dengan pilih ${bestOta.name} dibanding OTA termahal
+              </span>
+            </div>
+
+            <div class="flight-main">
+              <!-- Airline Info -->
+              <div class="flex items-center gap-3">
+                <div class="airline-logo-box" style="background: ${fl.badgeColor}; color: white;">
+                  ${fl.logoText}
+                </div>
+                <div>
+                  <div style="font-weight: 800; font-size: 1.02rem;">${fl.airlineFull}</div>
+                  <div style="font-size: 0.78rem; color: var(--text-slate);">${fl.flightCode}</div>
+                  <div class="badge badge-turquoise" style="margin-top: 6px; font-size: 0.7rem;">🧳 ${fl.baggageIncluded}</div>
+                </div>
+              </div>
+
+              <!-- Timeline -->
+              <div class="route-timeline">
+                <div style="text-align: center;">
+                  <div style="font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800;">${fl.depTime}</div>
+                  <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-slate);">CGK</div>
+                </div>
+
+                <div class="route-line">
+                  <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-slate);">${fl.durationText}</div>
+                  <div class="route-line-bar"></div>
+                  <div style="font-size: 0.75rem; font-weight: 800; color: ${fl.stopType === 'direct' ? 'var(--lime-dark)' : 'var(--coral)'};">
+                    ${fl.stopText}
+                  </div>
+                </div>
+
+                <div style="text-align: center;">
+                  <div style="font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800;">${fl.arrTime}</div>
+                  <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-slate);">DPS</div>
+                </div>
+              </div>
+
+              <!-- Best OTA Deal & Compare Button -->
+              <div class="ota-deal-box">
+                <div class="flex items-center gap-2" style="margin-bottom: 4px;">
+                  <span style="font-size: 0.75rem; color: var(--text-slate);">Termurah di</span>
+                  <span class="ota-badge ${bestOta.style}">${bestOta.name}</span>
+                </div>
+                <div class="text-price" style="font-size: 1.55rem; color: var(--coral);" data-idr="${lowestTotal}">
+                  ${formatMoney(lowestTotal)}
+                </div>
+                <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 10px;">
+                  /orang • Sudah termasuk pajak ${baggageAdd > 0 ? '& bagasi ekstra' : ''}
+                </div>
+                <div class="flex gap-2" style="width: 100%; justify-content: flex-end;">
+                  <button class="btn btn-outline btn-sm" onclick="toggleOtaDrawer('drawer-${fl.id}', this)">
+                    🏪 Adu ${fl.otas.length} OTA ▾
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="showToast('Mengarahkan ke ${bestOta.name}...', 'Kode promo otomatis MadTravel berhasil diterapkan!', 'lime')">
+                    Pilih Deal ➔
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expandable Multi-OTA Comparison Matrix -->
+            <div class="ota-drawer ${idx === 0 ? 'open' : ''}" id="drawer-${fl.id}">
+              <div class="flex justify-between items-center flex-wrap gap-2" style="margin-bottom: 12px;">
+                <div style="font-weight: 800; font-size: 0.9rem;">
+                  🔍 Perbandingan Harga Real-Time (${fl.airlineFull} ${fl.depTime}) di Semua Situs Booking:
+                </div>
+                <span style="font-size: 0.78rem; color: var(--text-slate);">✅ Harga final tanpa biaya tersembunyi</span>
+              </div>
+
+              ${fl.otas.map(ota => {
+                const totalOta = ota.basePrice + baggageAdd;
+                return `
+                  <div class="ota-matrix-row ${ota.cheapest ? 'cheapest' : ''}">
+                    <div class="flex items-center gap-2">
+                      <span class="ota-badge ${ota.style}">${ota.name}</span>
+                      ${ota.cheapest ? '<span class="badge badge-lime" style="font-size:0.68rem;">HARGA TERMURAH 🏆</span>' : ''}
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-slate);">
+                      ✨ ${ota.perk}
+                    </div>
+                    <div style="text-align: right;">
+                      <div class="text-price" style="font-size: 1.1rem; color: ${ota.cheapest ? 'var(--lime-dark)' : 'var(--text-navy)'};">
+                        ${formatMoney(totalOta)}
+                      </div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted);">Termasuk pajak & biaya layanan</div>
+                    </div>
+                    <div>
+                      <button class="btn ${ota.cheapest ? 'btn-turquoise' : 'btn-outline'} btn-sm" onclick="showToast('Membuka ${ota.name}', 'Meneruskan detail penumpang ke halaman checkout resmi ${ota.name}.', 'turquoise')">
+                        Buka di ${ota.name} ↗
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function toggleOtaDrawer(drawerId, btn) {
+      const el = document.getElementById(drawerId);
+      if (!el) return;
+      el.classList.toggle('open');
+      if (el.classList.contains('open')) {
+        btn.innerHTML = '🏪 Tutup OTA ▴';
+      } else {
+        btn.innerHTML = '🏪 Adu Semua OTA ▾';
+      }
+    }
+
+    function sortFlights(sortType, btnEl) {
+      currentSort = sortType;
+      document.querySelectorAll('.sort-card').forEach(c => c.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      renderFlights();
+    }
+
+    function selectDatePill(el) {
+      document.querySelectorAll('.date-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      renderFlights();
+      showToast('Tanggal Diperbarui', 'Menampilkan perbandingan harga dari 14 OTA untuk tanggal pilihan.', 'sunny');
+    }
+
+    function resetFlightFilters() {
+      document.querySelectorAll('.filter-stop, .filter-airline').forEach(cb => cb.checked = true);
+      const slider = document.getElementById('price-range-slider');
+      if (slider) {
+        slider.value = 2500000;
+        document.getElementById('price-slider-label').textContent = formatMoney(2500000);
+      }
+      renderFlights();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFlights();
+
+      document.getElementById('baggage-select')?.addEventListener('change', () => {
+        renderFlights();
+        showToast('Kalkulator Bagasi Diperbarui', 'Seluruh harga OTA telah dihitung ulang dengan tambahan bagasi.', 'turquoise');
+      });
+
+      document.getElementById('price-range-slider')?.addEventListener('input', (e) => {
+        document.getElementById('price-slider-label').textContent = formatMoney(parseInt(e.target.value, 10));
+        renderFlights();
+      });
+
+      document.querySelectorAll('.filter-stop, .filter-airline').forEach(cb => {
+        cb.addEventListener('change', renderFlights);
+      });
+
+      window.onCurrencyChanged = () => {
+        renderFlights();
+      };
+    });
+  </script>
+</body>
+</html>

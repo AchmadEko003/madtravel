@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Smart Trip Planner & Budget Optimizer — MadTravel SaaS</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .planner-layout {
+      display: grid;
+      grid-template-columns: 370px 1fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 28px;
+    }
+
+    .config-panel {
+      background: var(--bg-card);
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 24px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .vibe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .vibe-btn {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-color);
+      background: var(--bg-sand);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-align: left;
+      transition: var(--transition);
+    }
+
+    .vibe-btn.active {
+      background: var(--sunny);
+      border-color: var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    /* Budget Allocation Bar */
+    .budget-bar-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .stacked-progress {
+      height: 18px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border-bold);
+      overflow: hidden;
+      display: flex;
+      margin: 12px 0;
+    }
+
+    /* Timeline Days */
+    .day-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .day-tab {
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border-bold);
+      background: var(--bg-card);
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-pop-sm);
+      transition: var(--transition);
+    }
+
+    .day-tab.active {
+      background: var(--turquoise);
+      color: white;
+    }
+
+    .timeline-step {
+      display: grid;
+      grid-template-columns: 95px 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .time-badge {
+      background: var(--sunny);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.82rem;
+      height: fit-content;
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .activity-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    @media (max-width: 980px) {
+      .planner-layout {
+        grid-template-columns: 1fr;
+      }
+      .config-panel {
+        position: static;
+      }
+      .timeline-step {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">🤖 AI TRIP COPILOT</span>
+        <span>Susun jadwal liburan otomatis + <strong>kunci harga tiket & hotel termurah langsung dari mesin metasearch!</strong></span>
+      </div>
+      <div class="top-promo-utils">
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✈️</div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">📈 Price Alert <span class="nav-badge">PRO</span></a>
+        <a href="ai-planner.html" class="nav-link active">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline btn-sm" onclick="showToast('Link Disalin!', 'Tautan itinerary siap dibagikan ke grup WhatsApp keluarga/teman.', 'turquoise')">🔗 Bagikan Trip</button>
+        <a href="pricing.html" class="btn btn-primary btn-sm">Export PDF (Pro)</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 28px;">
+    <div class="flex justify-between items-center flex-wrap gap-4">
+      <div>
+        <span class="badge badge-pop badge-sunny" style="margin-bottom: 6px;">✨ AI METASEARCH ITINERARY BUILDER</span>
+        <h1 class="title-h1">Rancang Liburan Impian Sesuai Bujetmu</h1>
+        <p style="color: var(--text-slate);">AI kami mencocokkan jadwal harian dengan harga tiket pesawat & hotel real-time termurah dari 120+ OTA.</p>
+      </div>
+    </div>
+
+    <div class="planner-layout">
+      <!-- Left Generator Control Panel -->
+      <aside class="config-panel">
+        <h3 class="title-h3" style="margin-bottom: 14px;">🎛️ Parameter Perjalanan</h3>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-slate);">🌴 Pilih Destinasi Impian</label>
+          <select id="ai-dest-select" style="width:100%; background:var(--bg-sand); border:2px solid var(--border-bold); border-radius:var(--radius-md); padding:10px 12px; font-weight:800; margin-top:4px; cursor:pointer;">
+            <option value="bali">🏝️ Bali (Uluwatu, Canggu & Ubud) — 4H3M</option>
+            <option value="bajo">⛵ Labuan Bajo & Pulau Padar — 4H3M</option>
+            <option value="tokyo">🗼 Tokyo & Gunung Fuji, Jepang — 5H4M</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <div class="flex justify-between items-center">
+            <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-slate);">💰 Target Total Bujet / Orang</label>
+            <span id="ai-budget-display" class="text-price" style="color: var(--coral); font-size: 0.95rem;">Rp 5.500.000</span>
+          </div>
+          <input type="range" id="ai-budget-slider" min="2500000" max="15000000" step="250000" value="5500000" style="width: 100%; accent-color: var(--turquoise); margin-top: 8px; cursor: pointer;" />
+          <div class="flex justify-between" style="font-size: 0.72rem; color: var(--text-muted);">
+            <span>Backpacker (2,5 Jt)</span>
+            <span>Luxury (15 Jt)</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-slate);">🎭 Gaya Liburan (Travel Vibe)</label>
+          <div class="vibe-grid">
+            <button type="button" class="vibe-btn active" onclick="selectVibe(this, 'Santai & Beach Club')">🍹 Santai & Beach</button>
+            <button type="button" class="vibe-btn" onclick="selectVibe(this, 'Kuliner & Hidden Gem')">🍜 Kuliner & Lokal</button>
+            <button type="button" class="vibe-btn" onclick="selectVibe(this, 'Keluarga & Anak')">👨‍👩‍👧 Ramah Keluarga</button>
+            <button type="button" class="vibe-btn" onclick="selectVibe(this, 'Petualangan & Alam')">🤿 Alam & Snorkeling</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="regenerateItinerary()">
+          ✨ Susun Ulang dengan AI
+        </button>
+
+        <div style="background: var(--bg-ocean-tint); border: 1.5px solid var(--turquoise); border-radius: var(--radius-md); padding: 12px; font-size: 0.78rem; color: var(--text-navy);">
+          💡 <strong>Keunggulan Metasearch AI:</strong> Setiap komponen tiket & hotel di sebelah kanan terhubung langsung ke OTA termurah saat ini.
+        </div>
+      </aside>
+
+      <!-- Right Itinerary Output Area -->
+      <section>
+        <!-- Smart Budget Breakdown Card -->
+        <div class="budget-bar-card">
+          <div class="flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <span class="badge badge-lime">✅ SESUAI BUJET ANDA</span>
+              <h2 class="title-h3" id="plan-header-title" style="margin-top: 6px;">Eksplorasi Tropis Bali: Canggu, Ubud & Uluwatu (4 Hari 3 Malam)</h2>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.75rem; color: var(--text-slate);">Total Estimasi Metasearch / Orang</div>
+              <div class="text-price" style="font-size: 1.6rem; color: var(--turquoise-dark);" id="plan-total-cost" data-idr="4620000">Rp 4.620.000</div>
+            </div>
+          </div>
+
+          <div class="stacked-progress">
+            <div style="width: 36%; background: var(--coral);" title="Tiket Pesawat PP (36%)"></div>
+            <div style="width: 42%; background: var(--turquoise);" title="Hotel & Villa 3 Malam (42%)"></div>
+            <div style="width: 22%; background: var(--sunny);" title="Kuliner, Tiket Wisata & Transport (22%)"></div>
+          </div>
+
+          <div class="flex justify-between flex-wrap gap-2" style="font-size: 0.8rem; font-weight: 700;">
+            <span>🟥 Tiket PP via Tiket.com: <strong id="cost-flight">Rp 1.580.000</strong></span>
+            <span>🟩 Hotel 3 Malam via Agoda: <strong id="cost-hotel">Rp 1.950.000</strong></span>
+            <span>🟨 Aktivitas & Kuliner: <strong id="cost-activity">Rp 1.090.000</strong></span>
+          </div>
+        </div>
+
+        <!-- Day Selector Tabs -->
+        <div class="day-tabs" id="day-tabs-bar"></div>
+
+        <!-- Timeline Steps Container -->
+        <div id="itinerary-timeline-container"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel AI Trip Planner • Terintegrasi penuh dengan mesin perbandingan harga OTA.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="flights.html">Bandingkan Pesawat</a>
+        <a href="hotels.html">Bandingkan Hotel</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const itineraryDatabase = {
+      bali: {
+        title: 'Eksplorasi Tropis Bali: Canggu, Ubud & Uluwatu (4 Hari 3 Malam)',
+        totalCost: 4620000,
+        flightCost: 1580000,
+        hotelCost: 1950000,
+        actCost: 1090000,
+        days: [
+          {
+            dayLabel: 'Hari 1: Tiba & Sunset Canggu',
+            steps: [
+              {
+                time: '07:15 WIB',
+                title: '✈️ Penerbangan Jakarta (CGK) ➔ Bali (DPS) — AirAsia QZ-7520',
+                desc: 'Penerbangan pagi langsung agar waktu liburan di Bali lebih maksimal.',
+                otaTag: 'Termurah di Tiket.com',
+                price: 790000,
+                link: 'flights.html',
+                btnText: 'Kunci Tiket di Tiket.com ↗'
+              },
+              {
+                time: '13:00 WITA',
+                title: '🏨 Check-in di Canggu Tropical Surf Resort (4★)',
+                desc: 'Kamar Lagoon Access 100m dari Pantai Batu Bolong. Kami membandingkan Agoda vs Traveloka dan menemukan selisih Rp 180rb/malam!',
+                otaTag: 'Termurah di Agoda',
+                price: 650000,
+                link: 'hotels.html',
+                btnText: 'Pesan Kamar via Agoda ↗'
+              },
+              {
+                time: '17:00 WITA',
+                title: '🍹 Sunset & Live Acoustic di Lawn / Potato Head Beach Club',
+                desc: 'Nikmati kelapa muda segar dan matahari terbenam Samudra Hindia bersama kuliner coastal.',
+                otaTag: 'Voucher Klook Diskon 15%',
+                price: 250000,
+                link: 'hotels.html',
+                btnText: 'Cek Voucher F&B ↗'
+              }
+            ]
+          },
+          {
+            dayLabel: 'Hari 2: Lembah Tropis Ubud',
+            steps: [
+              {
+                time: '08:30 WITA',
+                title: '🌾 Trekking Pagi Tegallalang Rice Terrace & Jungle Swing',
+                desc: 'Udara pagi Ubud yang sejuk dilanjutkan kopi Kintamani di tepi lembah.',
+                otaTag: 'Tiket Masuk Bundling',
+                price: 185000,
+                link: 'index.html',
+                btnText: 'Lihat Paket Wisata ↗'
+              },
+              {
+                time: '13:30 WITA',
+                title: '🏊‍♂️ Day Pass Infinity Pool di The Kayon Jungle Resort',
+                desc: 'Berenang di kolam bertingkat ikonik Ubud sudah termasuk makan siang 2 hidangan.',
+                otaTag: 'Promo Traveloka Xperience',
+                price: 420000,
+                link: 'hotels.html',
+                btnText: 'Lihat Resort di Peta ↗'
+              }
+            ]
+          },
+          {
+            dayLabel: 'Hari 3: Tebing Laut Uluwatu',
+            steps: [
+              {
+                time: '10:00 WITA',
+                title: '🏖️ Bersantai di Pantai Melasti & Padang-Padang',
+                desc: 'Air laut biru jernih dengan tebing kapur raksasa yang fotogenik.',
+                otaTag: 'Sewa Mobil + Supir Seharian',
+                price: 275000,
+                link: 'index.html',
+                btnText: 'Bandingkan Sewa Mobil ↗'
+              },
+              {
+                time: '18:00 WITA',
+                title: '🔥 Tari Kecak Sunset Uluwatu & Seafood BBQ Jimbaran',
+                desc: 'Tonton pertunjukan budaya di atas tebing laut lalu makan malam ikan bakar di tepi pantai.',
+                otaTag: 'Hemat 20% via Tiket.com',
+                price: 310000,
+                link: 'index.html',
+                btnText: 'Ambil e-Voucher ↗'
+              }
+            ]
+          }
+        ]
+      },
+      bajo: {
+        title: 'Sailing Phinisi Labuan Bajo, Pulau Padar & Komodo (4 Hari 3 Malam)',
+        totalCost: 5890000,
+        flightCost: 2380000,
+        hotelCost: 2450000,
+        actCost: 1060000,
+        days: [
+          {
+            dayLabel: 'Hari 1: Terbang ke Flores & Sunset Bukit Sylvia',
+            steps: [
+              {
+                time: '09:40 WIB',
+                title: '✈️ Penerbangan Langsung ke Labuan Bajo (LBJ) — Citilink',
+                desc: 'Sudah termasuk bagasi 15kg untuk peralatan snorkeling & kamera.',
+                otaTag: 'Termurah di Traveloka',
+                price: 1190000,
+                link: 'flights.html',
+                btnText: 'Cek Tiket LBJ ↗'
+              },
+              {
+                time: '15:00 WITA',
+                title: '🏨 Menginap di Seaesta Komodo Hostel & Resort',
+                desc: 'Rooftop pool menghadap pelabuhan kapal Phinisi Labuan Bajo.',
+                otaTag: 'Termurah di Booking.com',
+                price: 820000,
+                link: 'hotels.html',
+                btnText: 'Bandingkan Kamar ↗'
+              }
+            ]
+          },
+          {
+            dayLabel: 'Hari 2: Sailing Pulau Padar, Pink Beach & Manta Point',
+            steps: [
+              {
+                time: '05:30 WITA',
+                title: '⛵ Full-Day Speedboat / Phinisi Hopping 6 Pulau',
+                desc: 'Sunrise puncak Pulau Padar, melihat Komodo asli, dan berenang bersama pari Manta.',
+                otaTag: 'Termurah di Tiket.com',
+                price: 1060000,
+                link: 'index.html',
+                btnText: 'Bandingkan Operator Kapal ↗'
+              }
+            ]
+          }
+        ]
+      },
+      tokyo: {
+        title: 'Petualangan Jepang: Shibuya, Asakusa & Gunung Fuji (5 Hari 4 Malam)',
+        totalCost: 9850000,
+        flightCost: 5490000,
+        hotelCost: 2960000,
+        actCost: 1400000,
+        days: [
+          {
+            dayLabel: 'Hari 1: Tiba di Tokyo Narita & Malam Shinjuku',
+            steps: [
+              {
+                time: '06:20 WIB',
+                title: '✈️ Penerbangan Jakarta (CGK) ➔ Tokyo Narita (NRT)',
+                desc: 'Termasuk bagasi 2x23kg. Ditemukan diskon khusus di Trip.com!',
+                otaTag: 'Termurah di Trip.com',
+                price: 5490000,
+                link: 'flights.html',
+                btnText: 'Lihat Tiket Jepang ↗'
+              },
+              {
+                time: '16:00 JST',
+                title: '🏨 Check-in APA Hotel & Resort Shinjuku Gyoenmae',
+                desc: '200 meter dari stasiun Metro Tokyo, mudah ke mana-mana.',
+                otaTag: 'Termurah di Agoda',
+                price: 2960000,
+                link: 'hotels.html',
+                btnText: 'Cek Tarif Agoda ↗'
+              }
+            ]
+          },
+          {
+            dayLabel: 'Hari 2: Kawaguchiko Gunung Fuji & Shibuya Sky',
+            steps: [
+              {
+                time: '08:00 JST',
+                title: '🗻 Day Trip Gunung Fuji & Danau Kawaguchiko',
+                desc: 'Termasuk tiket bus ekspres Shinjuku PP dan kereta gantung.',
+                otaTag: 'Promo Klook / Trip.com',
+                price: 890000,
+                link: 'index.html',
+                btnText: 'Bandingkan Pass Jepang ↗'
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    let currentDestKey = 'bali';
+    let currentDayIdx = 0;
+
+    function renderPlanner() {
+      const data = itineraryDatabase[currentDestKey] || itineraryDatabase.bali;
+
+      document.getElementById('plan-header-title').textContent = data.title;
+      document.getElementById('plan-total-cost').textContent = formatMoney(data.totalCost);
+      document.getElementById('cost-flight').textContent = formatMoney(data.flightCost);
+      document.getElementById('cost-hotel').textContent = formatMoney(data.hotelCost);
+      document.getElementById('cost-activity').textContent = formatMoney(data.actCost);
+
+      // Render Day Tabs
+      const tabsBar = document.getElementById('day-tabs-bar');
+      tabsBar.innerHTML = data.days.map((d, idx) => `
+        <button class="day-tab ${idx === currentDayIdx ? 'active' : ''}" onclick="switchDay(${idx})">
+          📅 ${d.dayLabel}
+        </button>
+      `).join('');
+
+      // Render Steps
+      const dayObj = data.days[currentDayIdx] || data.days[0];
+      const timeline = document.getElementById('itinerary-timeline-container');
+      timeline.innerHTML = dayObj.steps.map(st => `
+        <div class="timeline-step">
+          <div class="time-badge">${st.time}</div>
+          <div class="activity-card">
+            <div class="flex justify-between items-start flex-wrap gap-2" style="margin-bottom: 6px;">
+              <h4 class="title-h3" style="font-size: 1.08rem;">${st.title}</h4>
+              <span class="badge badge-lime">${st.otaTag}</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-slate); margin-bottom: 14px;">${st.desc}</p>
+            <div class="flex justify-between items-center flex-wrap gap-2" style="padding-top: 12px; border-top: 1.5px dashed var(--border-color);">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Harga Metasearch Termurah: </span>
+                <span class="text-price" style="font-size: 1.1rem; color: var(--coral);">${formatMoney(st.price)}</span>
+              </div>
+              <a href="${st.link}" class="btn btn-turquoise btn-sm">${st.btnText}</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchDay(idx) {
+      currentDayIdx = idx;
+      renderPlanner();
+    }
+
+    function selectVibe(btn, vibeName) {
+      document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showToast('Gaya Liburan Dipilih', `AI menyesuaikan rekomendasi untuk gaya "${vibeName}".`, 'sunny');
+    }
+
+    function regenerateItinerary() {
+      const sel = document.getElementById('ai-dest-select');
+      currentDestKey = sel ? sel.value : 'bali';
+      currentDayIdx = 0;
+      renderPlanner();
+      showToast('Itinerary Berhasil Disusun!', 'Seluruh harga tiket & hotel telah disinkronkan dengan OTA termurah.', 'lime');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPlanner();
+
+      document.getElementById('ai-dest-select')?.addEventListener('change', (e) => {
+        currentDestKey = e.target.value;
+        currentDayIdx = 0;
+        renderPlanner();
+      });
+
+      document.getElementById('ai-budget-slider')?.addEventListener('input', (e) => {
+        document.getElementById('ai-budget-display').textContent = formatMoney(parseInt(e.target.value, 10));
+      });
+
+      window.onCurrencyChanged = () => renderPlanner();
+    });
+  </script>
+</body>
+</html>

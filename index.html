@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MadTravel — Metasearch Travel & SaaS Power Tools #1 di Asia Tenggara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Page-specific styles for Home / Landing Page */
+    .hero-section {
+      padding: 48px 0 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-top-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .hero-illustration-card {
+      background: linear-gradient(145deg, #00B4A2 0%, #0F2942 100%);
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: 8px 8px 0px var(--border-bold);
+      padding: 24px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .floating-sticker {
+      position: absolute;
+      background: var(--sunny);
+      color: var(--text-navy);
+      border: 2px solid var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 3;
+    }
+
+    /* Live Compare Preview Mini Table inside Hero */
+    .live-ota-mini {
+      background: var(--bg-card);
+      color: var(--text-navy);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 14px;
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .live-ota-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .live-ota-row.cheapest {
+      background: var(--bg-lime-tint);
+      border: 1.5px solid #34D399;
+    }
+
+    /* Cheapest Month Heatmap Calendar */
+    .calendar-heatmap {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cal-day-header {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-slate);
+      text-transform: uppercase;
+      padding-bottom: 6px;
+    }
+
+    .cal-cell {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .cal-cell:hover {
+      border-color: var(--border-bold);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .cal-cell.price-low {
+      background: var(--bg-lime-tint);
+      border-color: #10B981;
+    }
+
+    .cal-cell.price-mid {
+      background: var(--bg-sunny-tint);
+      border-color: #FBBF24;
+    }
+
+    .cal-cell.price-high {
+      background: var(--bg-coral-tint);
+      border-color: #FCA5A5;
+    }
+
+    .cal-date-num {
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cal-price-tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    /* Destination Cards */
+    .dest-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dest-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 8px 10px 0px var(--border-bold);
+    }
+
+    .dest-art {
+      height: 185px;
+      position: relative;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--border-bold);
+      overflow: hidden;
+    }
+
+    .dest-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ota-mini-list {
+      margin: 14px 0;
+      padding: 10px;
+      background: var(--bg-sand);
+      border-radius: var(--radius-sm);
+      border: 1.5px dashed var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* SaaS Power Tools Bento Grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    .bento-card {
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 980px) {
+      .hero-top-grid, .bento-grid {
+        grid-template-columns: 1fr;
+      }
+      .calendar-heatmap {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .cal-day-header {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Promo / SaaS Status Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">🔥 FITUR BARU</span>
+        <span>Pantau harga tiket & hotel dari <strong>120+ OTA & Maskapai</strong> sekaligus — Hemat rata-rata <strong>24%</strong> per perjalanan!</span>
+      </div>
+      <div class="top-promo-utils">
+        <a href="price-alerts.html" style="color: var(--sunny); font-weight:700;">🔔 2 Alert Harga Turun!</a>
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link active">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">
+          📈 Price Alert
+          <span class="nav-badge">PRO</span>
+        </a>
+        <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="price-alerts.html" class="btn btn-outline btn-sm">🔔 Pantau Harga</a>
+        <a href="pricing.html" class="btn btn-primary btn-sm">Coba Pro Gratis</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Buka Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section with Tropical Vibrant Aesthetic & Metasearch Box -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-top-grid">
+        <!-- Left Hero Copy -->
+        <div>
+          <div class="flex items-center gap-2 flex-wrap" style="margin-bottom: 16px;">
+            <span class="badge badge-pop badge-sunny">🏝️ #1 Tropical Travel Metasearch SaaS</span>
+            <span class="badge badge-turquoise">⚡ Tanpa Biaya Admin Tambahan</span>
+          </div>
+          <h1 class="title-display" style="margin-bottom: 18px;">
+            Satu Klik, Bandingkan <span class="highlight-coral">Semua Situs Travel</span> & Dapatkan Harga Termurah!
+          </h1>
+          <p style="font-size: 1.1rem; color: var(--text-slate); margin-bottom: 24px; max-width: 600px;">
+            Jangan buka 10 tab Traveloka, Tiket.com, Agoda, atau Booking.com satu-satu! <strong>MadTravel</strong> menyapu bersih ratusan OTA real-time, lengkap dengan <strong>AI Prediksi Harga</strong> & <strong>Notifikasi WhatsApp</strong> saat harga anjlok.
+          </p>
+          <div class="flex items-center gap-6 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span style="font-size: 1.5rem;">🛡️</span>
+              <div>
+                <div style="font-weight: 800; font-size: 0.9rem;">100% Harga Jujur</div>
+                <div style="font-size: 0.78rem; color: var(--text-slate);">Termasuk pajak & bagasi</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span style="font-size: 1.5rem;">📉</span>
+              <div>
+                <div style="font-weight: 800; font-size: 0.9rem;">AI Fare Predictor</div>
+                <div style="font-size: 0.78rem; color: var(--text-slate);">Akurasi prediksi 94.2%</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span style="font-size: 1.5rem;">💬</span>
+              <div>
+                <div style="font-weight: 800; font-size: 0.9rem;">Alert via WhatsApp</div>
+                <div style="font-size: 0.78rem; color: var(--text-slate);">Deteksi error fare 24/7</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Interactive Live Metasearch Preview Card -->
+        <div class="hero-illustration-card">
+          <div class="floating-sticker" style="top: 16px; right: 16px;">
+            <span>⚡ HEMAT Rp 360.000!</span>
+          </div>
+          <div class="flex items-center gap-3" style="margin-bottom: 12px;">
+            <span style="font-size: 2rem;">🌺</span>
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--turquoise-light); font-weight: 800;">Live Metasearch Scanner</div>
+              <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;">Jakarta (CGK) ➔ Bali (DPS)</div>
+            </div>
+          </div>
+
+          <p style="font-size: 0.83rem; color: #D5F5F1; margin-bottom: 12px;">
+            Penerbangan yang sama persis (Garuda Indonesia GA-404 • 08:30 WIB), tapi beda harga di tiap aplikasi:
+          </p>
+
+          <div class="live-ota-mini">
+            <div class="live-ota-row cheapest">
+              <div class="flex items-center gap-2">
+                <span class="ota-badge ota-tiket">Tiket.com</span>
+                <span class="badge badge-lime" style="font-size: 0.68rem; padding: 2px 7px;">TERMURAH 🏆</span>
+              </div>
+              <div class="text-price" style="color: var(--lime-dark); font-size: 1rem;" data-idr="1185000">Rp 1.185.000</div>
+            </div>
+            <div class="live-ota-row">
+              <div class="flex items-center gap-2">
+                <span class="ota-badge ota-traveloka">Traveloka</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Kupon Bank tersedia</span>
+              </div>
+              <div class="text-price" style="color: var(--text-navy);" data-idr="1240000">Rp 1.240.000</div>
+            </div>
+            <div class="live-ota-row">
+              <div class="flex items-center gap-2">
+                <span class="ota-badge ota-trip">Trip.com</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Gratis Lounge</span>
+              </div>
+              <div class="text-price" style="color: var(--text-navy);" data-idr="1310000">Rp 1.310.000</div>
+            </div>
+            <div class="live-ota-row" style="opacity: 0.7;">
+              <div class="flex items-center gap-2">
+                <span class="ota-badge ota-agoda">Agoda Flights</span>
+              </div>
+              <div class="text-price" style="text-decoration: line-through; color: var(--text-muted);" data-idr="1545000">Rp 1.545.000</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between" style="margin-top: 14px; font-size: 0.8rem; color: var(--sunny-light);">
+            <span>🤖 <strong>AI Signal:</strong> Waktu terbaik beli sekarang (Harga akan naik 18% besok)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Universal Metasearch Engine Box -->
+      <div class="metasearch-box">
+        <div class="search-tabs">
+          <div class="search-tab-group">
+            <button type="button" class="search-tab active" data-tab-target="flight">✈️ Tiket Pesawat</button>
+            <button type="button" class="search-tab" data-tab-target="hotel">🏨 Hotel & Villa</button>
+            <button type="button" class="search-tab" data-tab-target="ai">🤖 AI Smart Trip</button>
+            <a href="price-alerts.html" class="search-tab">🔔 Lacak Harga Turun</a>
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="ota-check-pill" style="background: var(--bg-lime-tint); border-color: #6EE7B7;">
+              <input type="checkbox" checked />
+              <span>⚡ Tampilkan Harga Final (+Pajak)</span>
+            </label>
+            <label class="ota-check-pill">
+              <input type="checkbox" checked />
+              <span>🧳 Termasuk Bagasi Kabin</span>
+            </label>
+          </div>
+        </div>
+
+        <form action="flights.html" method="GET">
+          <div class="search-Input-grid">
+            <div class="search-field">
+              <div class="search-field-label" data-label="origin">🛫 Dari Mana</div>
+              <input type="text" class="search-field-input" data-field="origin" value="Jakarta (CGK)" required />
+              <div class="search-field-sub" data-sub="origin">Soekarno-Hatta Intl, Indonesia</div>
+            </div>
+
+            <button type="button" class="swap-route-btn" title="Tukar Lokasi">⇄</button>
+
+            <div class="search-field">
+              <div class="search-field-label" data-label="destination">🛬 Mau Ke Mana</div>
+              <input type="text" class="search-field-input" data-field="destination" value="Denpasar, Bali (DPS)" required />
+              <div class="search-field-sub" data-sub="destination">I Gusti Ngurah Rai Intl, Bali</div>
+            </div>
+
+            <div class="search-field">
+              <div class="search-field-label">📅 Tanggal Pergi – Pulang</div>
+              <input type="text" class="search-field-input" value="18 Des – 23 Des 2026" />
+              <div class="search-field-sub" style="color: var(--lime-dark); font-weight: 700;">✨ Tanggal Termurah Terdeteksi!</div>
+            </div>
+
+            <div class="search-field">
+              <div class="search-field-label">👨‍👩‍👧 Penumpang & Kelas</div>
+              <input type="text" class="search-field-input" value="2 Dewasa • Ekonomi" />
+              <div class="search-field-sub">Bisa filter Bisnis / First</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="height: 100%; min-height: 68px;">
+              <span>🔍 Bandingkan</span>
+            </button>
+          </div>
+
+          <div class="ota-compare-strip">
+            <div class="flex items-center gap-2">
+              <span style="font-weight: 800; color: var(--text-navy);">🔥 Bandingkan Otomatis di:</span>
+              <div class="ota-pills">
+                <label class="ota-check-pill"><input type="checkbox" checked /> Traveloka</label>
+                <label class="ota-check-pill"><input type="checkbox" checked /> Tiket.com</label>
+                <label class="ota-check-pill"><input type="checkbox" checked /> Agoda</label>
+                <label class="ota-check-pill"><input type="checkbox" checked /> Booking.com</label>
+                <label class="ota-check-pill"><input type="checkbox" checked /> Trip.com</label>
+                <label class="ota-check-pill"><input type="checkbox" checked /> Web Resmi Maskapai</label>
+              </div>
+            </div>
+            <a href="ai-planner.html" style="color: var(--coral); font-weight: 800;">✨ Bingung mau ke mana? Gunakan AI Trip Finder ➔</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Cheapest Month Heatmap (SaaS Power Tool #1) -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="card-pop" style="background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF8 100%);">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <span class="badge badge-turquoise" style="margin-bottom: 8px;">📊 SAAS POWER TOOL: CHEAPEST MONTH RADAR</span>
+            <h2 class="title-h2">Kalender Heatmap Harga Termurah</h2>
+            <p style="color: var(--text-slate); font-size: 0.95rem;">
+              Lihat hari apa tiket paling murah dalam sebulan penuh dari seluruh OTA. Klik tanggal untuk langsung kunci harga!
+            </p>
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <select id="heatmap-route-select" class="btn btn-outline btn-sm" style="font-weight: 800;">
+              <option value="bali">✈️ Jakarta (CGK) ➔ Bali (DPS)</option>
+              <option value="sg">✈️ Jakarta (CGK) ➔ Singapura (SIN)</option>
+              <option value="tokyo">✈️ Jakarta (CGK) ➔ Tokyo (NRT)</option>
+              <option value="bajo">✈️ Surabaya (SUB) ➔ Labuan Bajo (LBJ)</option>
+            </select>
+            <div class="flex items-center gap-2" style="font-size: 0.8rem; font-weight: 700;">
+              <span class="badge badge-lime">Hijau = Murah Banget</span>
+              <span class="badge" style="background: var(--bg-sunny-tint); color: #B45309;">Kuning = Normal</span>
+              <span class="badge badge-coral">Merah = Peak Season</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calendar-heatmap" id="calendar-heatmap-grid">
+          <!-- Populated dynamically via script below -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Destinations with Multi-OTA Price Comparison -->
+  <section class="section">
+    <div class="container">
+      <div class="flex items-center justify-between flex-wrap gap-4" style="margin-bottom: 32px;">
+        <div>
+          <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">🏖️ DESTINASI POPULER MINGGU INI</span>
+          <h2 class="title-h1">Liburan Impian, Harga Sudah Diadu!</h2>
+        </div>
+        <div class="flex items-center gap-2" id="dest-filter-tabs">
+          <button class="btn btn-primary btn-sm" data-dest-filter="all">🌟 Semua</button>
+          <button class="btn btn-outline btn-sm" data-dest-filter="domestik">🇮🇩 Tropis Indonesia</button>
+          <button class="btn btn-outline btn-sm" data-dest-filter="internasional">🌏 Luar Negeri Hemat</button>
+        </div>
+      </div>
+
+      <div class="grid-3" id="destinations-grid">
+        <!-- Card 1: Bali -->
+        <article class="dest-card" data-category="domestik">
+          <div class="dest-art" style="background: linear-gradient(135deg, #00B4A2 0%, #059669 100%); color: white;">
+            <div class="flex justify-between items-start">
+              <span class="badge badge-pop badge-sunny">🔥 Turun 21%</span>
+              <span style="background: rgba(15,41,66,0.5); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">⭐ 4.9 (12.4rb review)</span>
+            </div>
+            <div>
+              <div style="font-size: 2.4rem; line-height:1;">🏝️🍹</div>
+              <h3 class="title-h3" style="color: white; margin-top: 6px;">Canggu & Uluwatu, Bali</h3>
+              <p style="font-size: 0.82rem; opacity: 0.9;">Pantai tropis, beach club & sunset terbaik</p>
+            </div>
+          </div>
+          <div class="dest-body">
+            <div>
+              <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                <span>✈️ Tiket PP + 🏨 Hotel 3 Malam</span>
+                <span style="color: var(--lime-dark); font-weight: 800;">Hemat Rp 420rb</span>
+              </div>
+              <div class="ota-mini-list">
+                <div class="flex justify-between items-center" style="font-size: 0.82rem; font-weight: 700;">
+                  <span class="ota-badge ota-tiket">Tiket.com</span>
+                  <span class="text-price" style="color: var(--lime-dark);" data-idr="1890000">Rp 1.890.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-traveloka">Traveloka</span>
+                  <span class="text-price" data-idr="2050000">Rp 2.050.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-agoda">Agoda</span>
+                  <span class="text-price" data-idr="2310000">Rp 2.310.000</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2" style="margin-top: 10px;">
+              <a href="flights.html" class="btn btn-turquoise btn-sm" style="flex: 1;">Lihat 18 Deal ➔</a>
+              <button class="btn btn-outline btn-sm" onclick="showToast('Price Alert Aktif!', 'Kami akan kirim WA jika paket Bali turun di bawah Rp 1,8 Juta.', 'lime')" title="Pasang Alert">🔔</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Labuan Bajo -->
+        <article class="dest-card" data-category="domestik">
+          <div class="dest-art" style="background: linear-gradient(135deg, #FF5A36 0%, #F59E0B 100%); color: white;">
+            <div class="flex justify-between items-start">
+              <span class="badge badge-pop" style="background: white; color: var(--text-navy);">🦎 Bucket List #1</span>
+              <span style="background: rgba(15,41,66,0.5); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">⭐ 4.95 (6.8rb review)</span>
+            </div>
+            <div>
+              <div style="font-size: 2.4rem; line-height:1;">⛵🌅</div>
+              <h3 class="title-h3" style="color: white; margin-top: 6px;">Labuan Bajo & Pulau Padar</h3>
+              <p style="font-size: 0.82rem; opacity: 0.9;">Sailing Phinisi, Pink Beach & Manta Point</p>
+            </div>
+          </div>
+          <div class="dest-body">
+            <div>
+              <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                <span>✈️ Tiket PP Langsung + Resort</span>
+                <span style="color: var(--lime-dark); font-weight: 800;">Hemat Rp 550rb</span>
+              </div>
+              <div class="ota-mini-list">
+                <div class="flex justify-between items-center" style="font-size: 0.82rem; font-weight: 700;">
+                  <span class="ota-badge ota-traveloka">Traveloka</span>
+                  <span class="text-price" style="color: var(--lime-dark);" data-idr="2750000">Rp 2.750.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-trip">Trip.com</span>
+                  <span class="text-price" data-idr="2990000">Rp 2.990.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-booking">Booking.com</span>
+                  <span class="text-price" data-idr="3300000">Rp 3.300.000</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2" style="margin-top: 10px;">
+              <a href="hotels.html" class="btn btn-primary btn-sm" style="flex: 1;">Bandingkan Resort ➔</a>
+              <button class="btn btn-outline btn-sm" onclick="showToast('Price Alert Aktif!', 'Notifikasi penurunan harga Labuan Bajo berhasil diaktifkan.', 'lime')" title="Pasang Alert">🔔</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Tokyo -->
+        <article class="dest-card" data-category="internasional">
+          <div class="dest-art" style="background: linear-gradient(135deg, #6366F1 0%, #EC4899 100%); color: white;">
+            <div class="flex justify-between items-start">
+              <span class="badge badge-pop badge-sunny">🌸 Promo Musim Semi</span>
+              <span style="background: rgba(15,41,66,0.5); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">⭐ 4.92 (19.1rb review)</span>
+            </div>
+            <div>
+              <div style="font-size: 2.4rem; line-height:1;">🗼🍣</div>
+              <h3 class="title-h3" style="color: white; margin-top: 6px;">Tokyo & Gunung Fuji, Jepang</h3>
+              <p style="font-size: 0.82rem; opacity: 0.9;">Shibuya, DisneySea & kuliner autentik</p>
+            </div>
+          </div>
+          <div class="dest-body">
+            <div>
+              <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                <span>✈️ Tiket PP Full-Service (Bagasi 2x23kg)</span>
+                <span style="color: var(--lime-dark); font-weight: 800;">Hemat Rp 1,15 Jt</span>
+              </div>
+              <div class="ota-mini-list">
+                <div class="flex justify-between items-center" style="font-size: 0.82rem; font-weight: 700;">
+                  <span class="ota-badge ota-trip">Trip.com</span>
+                  <span class="text-price" style="color: var(--lime-dark);" data-idr="5490000">Rp 5.490.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-direct">ANA Direct</span>
+                  <span class="text-price" data-idr="5850000">Rp 5.850.000</span>
+                </div>
+                <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+                  <span class="ota-badge ota-traveloka">Traveloka</span>
+                  <span class="text-price" data-idr="6640000">Rp 6.640.000</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2" style="margin-top: 10px;">
+              <a href="flights.html" class="btn btn-turquoise btn-sm" style="flex: 1;">Cek 24 Maskapai ➔</a>
+              <button class="btn btn-outline btn-sm" onclick="showToast('Price Alert Aktif!', 'Pantauan tiket murah ke Jepang sudah masuk daftar lacak Anda.', 'lime')" title="Pasang Alert">🔔</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SaaS Power Tools Bento Grid (Why MadTravel is more than just search) -->
+  <section class="section" style="background: var(--bg-sand-alt); border-top: 2px solid var(--border-color); border-bottom: 2px solid var(--border-color);">
+    <div class="container">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto 44px;">
+        <span class="badge badge-pop badge-coral" style="margin-bottom: 10px;">🚀 KENAPA MADTRAVEL SAAS?</span>
+        <h2 class="title-h1">Senjata Rahasia Traveler Cerdas & Pemburu Tiket Murah</h2>
+        <p style="color: var(--text-slate); margin-top: 8px;">
+          Kami menggabungkan mesin pencari metasearch super cepat dengan fitur otomasi SaaS agar Anda tidak pernah lagi beli tiket kemahalan.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Bento 1 -->
+        <div class="bento-card" style="background: var(--bg-ocean-tint);">
+          <div>
+            <span class="badge badge-pop badge-sunny" style="margin-bottom: 14px;">🔔 REAL-TIME WHATSAPP ALERT</span>
+            <h3 class="title-h2" style="margin-bottom: 10px;">Deteksi "Error Fare" & Flash Sale Sebelum Habis!</h3>
+            <p style="color: var(--text-slate); font-size: 0.94rem; margin-bottom: 20px;">
+              Bot kami memindai perubahan tarif di 120+ OTA setiap 60 detik. Saat maskapai salah pasang harga atau ada kupon tengah malam, WhatsApp Anda langsung berbunyi.
+            </p>
+          </div>
+          <div style="background: white; border: 2px solid var(--border-bold); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-pop-sm);">
+            <div class="flex items-center gap-3">
+              <span style="font-size: 1.8rem;">📲</span>
+              <div style="font-size: 0.82rem;">
+                <div style="font-weight: 800; color: var(--lime-dark);">[WhatsApp Bot MadTravel] • Baru saja</div>
+                <div>" Kak! Tiket CGK-NRT (Tokyo) turun drastis dari Rp 7,2 Jt ke <strong>Rp 4,1 Jt</strong> di Trip.com! Sisa 3 kursi!"</div>
+              </div>
+            </div>
+            <div style="margin-top: 12px;">
+              <a href="price-alerts.html" class="btn btn-turquoise btn-sm" style="width: 100%;">Buka Dashboard Price Alert ➔</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 2 -->
+        <div class="bento-card" style="background: var(--bg-coral-tint);">
+          <div>
+            <span class="badge badge-pop" style="background: white; margin-bottom: 14px;">🤖 AI TRIP PLANNER</span>
+            <h3 class="title-h3" style="margin-bottom: 10px;">Susun Itinerary + Hitung Bujet Real-Time</h3>
+            <p style="color: var(--text-slate); font-size: 0.9rem; margin-bottom: 18px;">
+              Cukup ketik bujet & gaya liburanmu. AI kami menyusun jadwal per jam lengkap dengan link tiket pesawat & hotel termurah dari hasil metasearch.
+            </p>
+          </div>
+          <div>
+            <div style="background: white; border: 2px solid var(--border-bold); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; font-size: 0.82rem;">
+              <div style="font-weight: 800;">✨ Contoh Prompt:</div>
+              <div style="color: var(--text-slate); font-style: italic;">"Liburan keluarga 4 hari di Bali bujet Rp 6 juta sudah termasuk tiket + villa kolam renang pribadi"</div>
+            </div>
+            <a href="ai-planner.html" class="btn btn-primary btn-sm" style="width: 100%;">Coba AI Trip Planner ➔</a>
+          </div>
+        </div>
+
+        <!-- Bento 3 -->
+        <div class="bento-card" style="background: var(--bg-sunny-tint);">
+          <div>
+            <span class="badge badge-pop" style="background: var(--text-navy); color: white; margin-bottom: 14px;">💎 PRO & WHITE-LABEL API</span>
+            <h3 class="title-h3" style="margin-bottom: 10px;">Bebas Iklan & Tersedia untuk Agen Travel</h3>
+            <p style="color: var(--text-slate); font-size: 0.9rem; margin-bottom: 18px;">
+              Upgrade ke <strong>Nomad Pro</strong> untuk alert tak terbatas, atau pasang widget metasearch MadTravel di website blog/agen travel Anda dan raih komisi afiliasi!
+            </p>
+          </div>
+          <div>
+            <div class="flex items-center justify-between" style="background: white; border: 2px solid var(--border-bold); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; font-size: 0.82rem;">
+              <span>💰 Komisi Afiliasi Partner</span>
+              <span style="font-weight: 800; color: var(--lime-dark);">s/d 70% Revenue Share</span>
+            </div>
+            <a href="pricing.html" class="btn btn-sunny btn-sm" style="width: 100%;">Lihat Paket & B2B API ➔</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="color: white; margin-bottom: 14px;">
+            <div class="brand-icon">✈️</div>
+            <span>MadTravel</span>
+          </div>
+          <p style="color: #9FB6CD; font-size: 0.9rem; margin-bottom: 20px; max-width: 340px;">
+            Platform SaaS Travel Metasearch generasi baru. Bandingkan tiket pesawat, hotel, dan paket liburan dari 120+ OTA dalam satu layar yang cerah dan transparan.
+          </p>
+          <div class="flex items-center gap-2">
+            <span class="badge badge-lime">🔒 SSL Encrypted</span>
+            <span class="badge badge-sunny">⚡ 99.98% Uptime API</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Mesin Metasearch</h4>
+          <div class="footer-links">
+            <a href="flights.html">Bandingkan Tiket Pesawat</a>
+            <a href="hotels.html">Perbandingan Harga Hotel</a>
+            <a href="price-alerts.html">Kalender Harga Termurah</a>
+            <a href="ai-planner.html">AI Smart Trip Planner</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Fitur SaaS & B2B</h4>
+          <div class="footer-links">
+            <a href="price-alerts.html">WhatsApp & Telegram Fare Alert</a>
+            <a href="pricing.html">Langganan Nomad Pro</a>
+            <a href="pricing.html#b2b-widget">White-Label Widget untuk Blog</a>
+            <a href="pricing.html#b2b-widget">Dokumentasi JSON REST API</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Partner OTA Resmi</h4>
+          <div class="footer-links">
+            <a href="flights.html">Traveloka & Tiket.com</a>
+            <a href="hotels.html">Agoda & Booking.com</a>
+            <a href="flights.html">Trip.com & Skyscanner Network</a>
+            <a href="flights.html">Garuda, AirAsia, Singapore Airlines</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 PT MadTravel Teknologi Nusantara. Seluruh hak cipta dilindungi.</div>
+        <div class="flex gap-4">
+          <a href="pricing.html">Syarat & Ketentuan</a>
+          <a href="pricing.html">Kebijakan Privasi</a>
+          <a href="pricing.html">Status Server API</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    // Home Page Interactive Heatmap Calendar & Destination Filter
+    const heatmapData = {
+      bali: [
+        { day: '1 Des', price: 980000, level: 'mid', ota: 'Tiket.com' },
+        { day: '2 Des', price: 850000, level: 'low', ota: 'Traveloka' },
+        { day: '3 Des', price: 820000, level: 'low', ota: 'AirAsia Direct' },
+        { day: '4 Des', price: 1120000, level: 'mid', ota: 'Trip.com' },
+        { day: '5 Des', price: 1350000, level: 'high', ota: 'Tiket.com' },
+        { day: '6 Des', price: 1290000, level: 'high', ota: 'Traveloka' },
+        { day: '7 Des', price: 890000, level: 'low', ota: 'Tiket.com' },
+        { day: '8 Des', price: 790000, level: 'low', ota: 'Trip.com', best: true },
+        { day: '9 Des', price: 840000, level: 'low', ota: 'Traveloka' },
+        { day: '10 Des', price: 950000, level: 'mid', ota: 'Agoda' },
+        { day: '11 Des', price: 1150000, level: 'mid', ota: 'Tiket.com' },
+        { day: '12 Des', price: 1450000, level: 'high', ota: 'Traveloka' },
+        { day: '13 Des', price: 1490000, level: 'high', ota: 'Trip.com' },
+        { day: '14 Des', price: 920000, level: 'mid', ota: 'Tiket.com' }
+      ],
+      sg: [
+        { day: '1 Des', price: 1150000, level: 'mid', ota: 'Trip.com' },
+        { day: '2 Des', price: 990000, level: 'low', ota: 'Scoot Direct', best: true },
+        { day: '3 Des', price: 1050000, level: 'low', ota: 'Traveloka' },
+        { day: '4 Des', price: 1320000, level: 'mid', ota: 'Tiket.com' },
+        { day: '5 Des', price: 1680000, level: 'high', ota: 'Agoda' },
+        { day: '6 Des', price: 1590000, level: 'high', ota: 'Trip.com' },
+        { day: '7 Des', price: 1120000, level: 'mid', ota: 'Traveloka' },
+        { day: '8 Des', price: 1020000, level: 'low', ota: 'Tiket.com' },
+        { day: '9 Des', price: 1040000, level: 'low', ota: 'Trip.com' },
+        { day: '10 Des', price: 1210000, level: 'mid', ota: 'Traveloka' },
+        { day: '11 Des', price: 1490000, level: 'high', ota: 'Tiket.com' },
+        { day: '12 Des', price: 1750000, level: 'high', ota: 'Trip.com' },
+        { day: '13 Des', price: 1620000, level: 'high', ota: 'Traveloka' },
+        { day: '14 Des', price: 1080000, level: 'low', ota: 'Scoot Direct' }
+      ],
+      tokyo: [
+        { day: '1 Des', price: 5800000, level: 'mid', ota: 'Trip.com' },
+        { day: '2 Des', price: 5150000, level: 'low', ota: 'Trip.com', best: true },
+        { day: '3 Des', price: 5290000, level: 'low', ota: 'Traveloka' },
+        { day: '4 Des', price: 6100000, level: 'mid', ota: 'ANA Direct' },
+        { day: '5 Des', price: 7200000, level: 'high', ota: 'Tiket.com' },
+        { day: '6 Des', price: 7450000, level: 'high', ota: 'Traveloka' },
+        { day: '7 Des', price: 5600000, level: 'mid', ota: 'Trip.com' },
+        { day: '8 Des', price: 5300000, level: 'low', ota: 'Trip.com' },
+        { day: '9 Des', price: 5400000, level: 'low', ota: 'Tiket.com' },
+        { day: '10 Des', price: 5950000, level: 'mid', ota: 'Traveloka' },
+        { day: '11 Des', price: 6800000, level: 'high', ota: 'Agoda' },
+        { day: '12 Des', price: 7600000, level: 'high', ota: 'Trip.com' },
+        { day: '13 Des', price: 7100000, level: 'high', ota: 'Traveloka' },
+        { day: '14 Des', price: 5490000, level: 'low', ota: 'Trip.com' }
+      ],
+      bajo: [
+        { day: '1 Des', price: 1420000, level: 'mid', ota: 'Traveloka' },
+        { day: '2 Des', price: 1250000, level: 'low', ota: 'Tiket.com' },
+        { day: '3 Des', price: 1190000, level: 'low', ota: 'Citilink', best: true },
+        { day: '4 Des', price: 1550000, level: 'mid', ota: 'Traveloka' },
+        { day: '5 Des', price: 1890000, level: 'high', ota: 'Trip.com' },
+        { day: '6 Des', price: 1820000, level: 'high', ota: 'Tiket.com' },
+        { day: '7 Des', price: 1380000, level: 'mid', ota: 'Traveloka' },
+        { day: '8 Des', price: 1220000, level: 'low', ota: 'Tiket.com' },
+        { day: '9 Des', price: 1290000, level: 'low', ota: 'Traveloka' },
+        { day: '10 Des', price: 1490000, level: 'mid', ota: 'Agoda' },
+        { day: '11 Des', price: 1750000, level: 'high', ota: 'Tiket.com' },
+        { day: '12 Des', price: 1950000, level: 'high', ota: 'Traveloka' },
+        { day: '13 Des', price: 1880000, level: 'high', ota: 'Trip.com' },
+        { day: '14 Des', price: 1270000, level: 'low', ota: 'Tiket.com' }
+      ]
+    };
+
+    function renderHeatmap(routeKey = 'bali') {
+      const grid = document.getElementById('calendar-heatmap-grid');
+      if (!grid) return;
+      const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+      const items = heatmapData[routeKey] || heatmapData.bali;
+
+      let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+      html += items.map(item => `
+        <div class="cal-cell price-${item.level}" onclick="window.location.href='flights.html'">
+          <div class="cal-date-num">
+            <span>${item.day}</span>
+            ${item.best ? '<span class="badge badge-sunny" style="font-size:0.62rem; padding:1px 6px;">TERMURAH 🏆</span>' : ''}
+          </div>
+          <div>
+            <div class="cal-price-tag" data-idr="${item.price}">${formatMoney(item.price)}</div>
+            <div style="font-size: 0.68rem; color: var(--text-slate);">via ${item.ota}</div>
+          </div>
+        </div>
+      `).join('');
+
+      grid.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHeatmap('bali');
+
+      const routeSelect = document.getElementById('heatmap-route-select');
+      if (routeSelect) {
+        routeSelect.addEventListener('change', (e) => {
+          renderHeatmap(e.target.value);
+        });
+      }
+
+      window.onCurrencyChanged = () => {
+        if (routeSelect) renderHeatmap(routeSelect.value);
+      };
+
+      // Destination Tabs Filter
+      const filterBtns = document.querySelectorAll('[data-dest-filter]');
+      const cards = document.querySelectorAll('#destinations-grid .dest-card');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => {
+            b.classList.remove('btn-primary');
+            b.classList.add('btn-outline');
+          });
+          btn.classList.remove('btn-outline');
+          btn.classList.add('btn-primary');
+
+          const cat = btn.getAttribute('data-dest-filter');
+          cards.forEach(card => {
+            if (cat === 'all' || card.getAttribute('data-category') === cat) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

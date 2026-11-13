@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Price Alerts & Fare Tracker Dashboard — MadTravel SaaS</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .dashboard-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop-sm);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .kpi-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      border: 2px solid var(--border-bold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .tracker-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Alert Item Card */
+    .alert-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      padding: 20px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .alert-card:hover, .alert-card.active {
+      border-color: var(--turquoise-dark);
+      background: var(--bg-ocean-tint);
+      transform: translateY(-2px);
+    }
+
+    /* Chart Box */
+    .chart-box {
+      background: var(--bg-card);
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    /* Error Fare Radar Card */
+    .error-fare-item {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .form-input-pop {
+      width: 100%;
+      background: var(--bg-sand);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 980px) {
+      .dashboard-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tracker-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">🔔 SAAS FARE TRACKER</span>
+        <span>Bot pemantau harga aktif 24/7 — Memeriksa penurunan harga di <strong>120+ OTA setiap 60 detik</strong></span>
+      </div>
+      <div class="top-promo-utils">
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✈️</div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link active">📈 Price Alert <span class="nav-badge">PRO</span></a>
+        <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-turquoise btn-sm" onclick="openModal('new-alert-modal')">+ Buat Alert Baru</button>
+        <a href="pricing.html" class="btn btn-primary btn-sm">Nomad Pro Aktif ✨</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 32px;">
+    <!-- Header Banner -->
+    <div class="flex justify-between items-center flex-wrap gap-4" style="margin-bottom: 24px;">
+      <div>
+        <span class="badge badge-pop badge-sunny" style="margin-bottom: 6px;">📈 DASHBOARD PEMANTAU HARGA REAL-TIME</span>
+        <h1 class="title-h1">Price Alerts & Riwayat Pergerakan Tarif</h1>
+        <p style="color: var(--text-slate);">Klik salah satu rute pantauan Anda untuk melihat grafik tren harga 7 hari terakhir dan rekomendasi AI.</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn btn-outline" onclick="simulatePriceDrop()">⚡ Simulasikan Harga Turun</button>
+        <button class="btn btn-primary" onclick="openModal('new-alert-modal')">➕ Tambah Pantauan Rute</button>
+      </div>
+    </div>
+
+    <!-- KPI Summary Row -->
+    <div class="dashboard-kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: var(--bg-ocean-tint);">🔔</div>
+        <div>
+          <div style="font-size: 0.76rem; color: var(--text-slate); font-weight: 700;">Rute & Hotel Dipantau</div>
+          <div style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;" id="kpi-count">4 Aktif</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: var(--bg-lime-tint);">🔥</div>
+        <div>
+          <div style="font-size: 0.76rem; color: var(--text-slate); font-weight: 700;">Sudah Capai Target Murah</div>
+          <div style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--lime-dark);">2 Deal Siap Beli!</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: var(--bg-sunny-tint);">💰</div>
+        <div>
+          <div style="font-size: 0.76rem; color: var(--text-slate); font-weight: 700;">Potensi Penghematan Anda</div>
+          <div class="text-price" style="font-size: 1.35rem; color: var(--coral);" data-idr="1480000">Rp 1.480.000</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: var(--purple-tint);">📲</div>
+        <div>
+          <div style="font-size: 0.76rem; color: var(--text-slate); font-weight: 700;">Channel Notifikasi</div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: var(--purple-play);">WhatsApp & Telegram ON</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tracker-layout">
+      <!-- Left Column: Interactive SVG Chart + Tracked Alerts List -->
+      <div>
+        <!-- Interactive SVG Price History Chart -->
+        <div class="chart-box">
+          <div class="flex justify-between items-start flex-wrap gap-3" style="margin-bottom: 16px;">
+            <div>
+              <span class="badge badge-turquoise" id="chart-badge">✈️ GRAFIK RIWAYAT HARGA 7 HARI TERAKHIR</span>
+              <h2 class="title-h3" id="chart-route-title" style="margin-top: 6px;">Jakarta (CGK) ➔ Bali (DPS)</h2>
+              <p id="chart-sub-info" style="font-size: 0.82rem; color: var(--text-slate);">Harga terendah hari ini ditemukan di Tiket.com</p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 0.74rem; color: var(--text-muted);">Target Alert Anda: <strong id="chart-target-price">Rp 950.000</strong></div>
+              <div class="text-price" style="font-size: 1.5rem; color: var(--lime-dark);" id="chart-current-price">Rp 890.000</div>
+            </div>
+          </div>
+
+          <!-- Dynamic SVG Line & Area Chart -->
+          <div style="background: var(--bg-sand); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
+            <svg id="price-history-svg" width="100%" height="210" viewBox="0 0 650 210" preserveAspectRatio="none"></svg>
+            <div class="flex justify-between" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-top: 8px; padding: 0 12px;">
+              <span>H-6</span>
+              <span>H-5</span>
+              <span>H-4</span>
+              <span>H-3</span>
+              <span>H-2</span>
+              <span>Kemarin</span>
+              <span style="color: var(--coral);">Hari Ini 🔥</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tracked Watchlist Cards -->
+        <div class="flex justify-between items-center" style="margin-bottom: 14px;">
+          <h3 class="title-h3">📋 Daftar Pantauan Harga Anda</h3>
+          <span style="font-size: 0.8rem; color: var(--text-slate);">Klik kartu untuk melihat grafik detail</span>
+        </div>
+
+        <div id="alerts-watchlist-container"></div>
+      </div>
+
+      <!-- Right Column: Live Error Fare Radar & Notification Settings -->
+      <aside>
+        <div class="card-pop" style="background: var(--bg-coral-tint); margin-bottom: 24px;">
+          <div class="flex items-center justify-between" style="margin-bottom: 10px;">
+            <span class="badge badge-pop badge-sunny">🚨 ERROR FARE RADAR LIVE</span>
+            <span style="font-size: 0.75rem; font-weight: 800; color: var(--coral);">Khusus Member Pro</span>
+          </div>
+          <h3 class="title-h3" style="margin-bottom: 6px;">Anomali Harga & Diskon Ekstrem Baru Terdeteksi!</h3>
+          <p style="font-size: 0.82rem; color: var(--text-slate); margin-bottom: 16px;">
+            Algoritma MadTravel mendeteksi penurunan harga tidak wajar (>35% di bawah rata-rata) di OTA berikut:
+          </p>
+
+          <div class="error-fare-item">
+            <div class="flex justify-between items-center" style="margin-bottom: 4px;">
+              <span class="badge badge-lime">HEMAT 46% 🔥</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">4 menit lalu • Trip.com</span>
+            </div>
+            <div style="font-weight: 800; font-size: 0.95rem;">Jakarta (CGK) ➔ Perth, Australia (PER) PP</div>
+            <div style="font-size: 0.78rem; color: var(--text-slate); margin-bottom: 8px;">Batik Air / Citilink • Mei 2027</div>
+            <div class="flex justify-between items-center">
+              <div>
+                <span style="text-decoration: line-through; font-size: 0.75rem; color: var(--text-muted);" data-idr="4200000">Rp 4.200.000</span>
+                <span class="text-price" style="font-size: 1.05rem; color: var(--coral); margin-left: 6px;" data-idr="2250000">Rp 2.250.000</span>
+              </div>
+              <a href="flights.html" class="btn btn-primary btn-sm">Sikat Deal ➔</a>
+            </div>
+          </div>
+
+          <div class="error-fare-item">
+            <div class="flex justify-between items-center" style="margin-bottom: 4px;">
+              <span class="badge badge-lime">HEMAT 39% ⚡</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">19 menit lalu • Agoda</span>
+            </div>
+            <div style="font-weight: 800; font-size: 0.95rem;">Padma Resort Ubud (5★) — Premier Room</div>
+            <div style="font-size: 0.78rem; color: var(--text-slate); margin-bottom: 8px;">Termasuk Sarapan 2 Orang • Jan 2027</div>
+            <div class="flex justify-between items-center">
+              <div>
+                <span style="text-decoration: line-through; font-size: 0.75rem; color: var(--text-muted);" data-idr="3400000">Rp 3.400.000</span>
+                <span class="text-price" style="font-size: 1.05rem; color: var(--coral); margin-left: 6px;" data-idr="2080000">Rp 2.080.000</span>
+              </div>
+              <a href="hotels.html" class="btn btn-turquoise btn-sm">Lihat Kamar ➔</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel Settings Card -->
+        <div class="card-pop">
+          <h3 class="title-h3" style="margin-bottom: 8px;">📲 Pengaturan Notifikasi Instan</h3>
+          <p style="font-size: 0.82rem; color: var(--text-slate); margin-bottom: 16px;">
+            Pilih ke mana bot MadTravel harus mengirim pesan saat harga tiket/hotel mencapai target Anda:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <label class="flex justify-between items-center" style="padding: 10px 12px; background: var(--bg-lime-tint); border: 1.5px solid #34D399; border-radius: var(--radius-md); cursor: pointer;">
+              <div>
+                <div style="font-weight: 800; font-size: 0.88rem;">💬 WhatsApp Fast Alert</div>
+                <div style="font-size: 0.74rem; color: var(--text-slate);">+62 812-8899-XXXX (Terverifikasi)</div>
+              </div>
+              <input type="checkbox" checked onchange="showToast('Pengaturan Disimpan', 'Status WhatsApp Alert berhasil diperbarui.', 'lime')" />
+            </label>
+
+            <label class="flex justify-between items-center" style="padding: 10px 12px; background: var(--bg-ocean-tint); border: 1.5px solid var(--turquoise); border-radius: var(--radius-md); cursor: pointer;">
+              <div>
+                <div style="font-weight: 800; font-size: 0.88rem;">✈️ Telegram Bot (@MadTravelBot)</div>
+                <div style="font-size: 0.74rem; color: var(--text-slate);">Notifikasi 0 detik tanpa delay</div>
+              </div>
+              <input type="checkbox" checked onchange="showToast('Pengaturan Disimpan', 'Status Telegram Bot berhasil diperbarui.', 'turquoise')" />
+            </label>
+
+            <label class="flex justify-between items-center" style="padding: 10px 12px; background: var(--bg-sand); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer;">
+              <div>
+                <div style="font-weight: 800; font-size: 0.88rem;">📧 Ringkasan Email Harian</div>
+                <div style="font-size: 0.74rem; color: var(--text-slate);">Laporan pergerakan harga setiap pukul 07:00</div>
+              </div>
+              <input type="checkbox" checked />
+            </label>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Modal: Create New Price Alert -->
+  <div class="modal-backdrop" id="new-alert-modal" onclick="if(event.target===this) closeModal('new-alert-modal')">
+    <div class="modal-card">
+      <div class="flex justify-between items-center" style="margin-bottom: 16px;">
+        <h3 class="title-h3">🔔 Buat Pantauan Harga Baru</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('new-alert-modal')">✕</button>
+      </div>
+
+      <form id="create-alert-form">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.82rem; font-weight: 800;">Kategori Pantauan</label>
+          <select id="alert-type" class="form-input-pop">
+            <option value="flight">✈️ Tiket Pesawat (Multi-OTA)</option>
+            <option value="hotel">🏨 Hotel & Resort</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.82rem; font-weight: 800;">Rute Penerbangan atau Nama Hotel</label>
+          <input type="text" id="alert-route" class="form-input-pop" placeholder="Contoh: Jakarta (CGK) ➔ Lombok (LOP)" value="Jakarta (CGK) ➔ Labuan Bajo (LBJ)" required />
+        </div>
+
+        <div class="grid-2" style="gap: 12px; margin-bottom: 14px;">
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 800;">Rentang Tanggal</label>
+            <input type="text" id="alert-dates" class="form-input-pop" value="12 Mar – 16 Mar 2027" required />
+          </div>
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 800;">Target Harga Impian (IDR)</label>
+            <input type="number" id="alert-target" class="form-input-pop" value="1350000" step="50000" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">🚀 Aktifkan Bot Pemantau Harga</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel SaaS Fare Tracker • Mesin pelacak tarif otomatis lintas OTA.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="flights.html">Cari Tiket</a>
+        <a href="pricing.html">Paket Langganan Pro</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    let activeAlertId = MadTravelState.savedAlerts[0].id;
+
+    function renderAlertsList() {
+      const container = document.getElementById('alerts-watchlist-container');
+      const kpiCount = document.getElementById('kpi-count');
+      if (!container) return;
+
+      if (kpiCount) kpiCount.textContent = `${MadTravelState.savedAlerts.length} Aktif`;
+
+      container.innerHTML = MadTravelState.savedAlerts.map(item => {
+        const isTargetMet = item.currentLowest <= item.targetPrice;
+        return `
+          <div class="alert-card ${item.id === activeAlertId ? 'active' : ''}" onclick="selectAlertForChart('${item.id}')">
+            <div class="flex justify-between items-start flex-wrap gap-2">
+              <div>
+                <div class="flex items-center gap-2" style="margin-bottom: 4px;">
+                  <span class="badge ${item.type === 'flight' ? 'badge-turquoise' : 'badge-purple'}">
+                    ${item.type === 'flight' ? '✈️ Penerbangan' : '🏨 Hotel & Villa'}
+                  </span>
+                  <span style="font-size: 0.78rem; color: var(--text-slate); font-weight: 700;">📅 ${item.dateRange}</span>
+                  ${isTargetMet ? '<span class="badge badge-lime">🎯 TARGET TERCAPAI!</span>' : '<span class="badge badge-sunny">⏳ Memantau...</span>'}
+                </div>
+                <h4 class="title-h3" style="font-size: 1.15rem;">${item.route}</h4>
+                <div style="font-size: 0.8rem; color: var(--text-slate); margin-top: 2px;">
+                  Maskapai/Kamar: <strong>${item.airline}</strong> • Termurah di <strong>${item.bestOta}</strong>
+                </div>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 0.74rem; color: var(--text-muted);">
+                  Target: <span>${formatMoney(item.targetPrice)}</span>
+                </div>
+                <div class="text-price" style="font-size: 1.4rem; color: ${isTargetMet ? 'var(--lime-dark)' : 'var(--coral)'};">
+                  ${formatMoney(item.currentLowest)}
+                </div>
+                <div class="flex gap-2 justify-end" style="margin-top: 8px;">
+                  <a href="${item.type === 'flight' ? 'flights.html' : 'hotels.html'}" class="btn btn-primary btn-sm" onclick="event.stopPropagation();">
+                    Buka di ${item.bestOta} ➔
+                  </a>
+                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); deleteAlert('${item.id}')" title="Hapus Alert">🗑️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAlertChart(alertId) {
+      const item = MadTravelState.savedAlerts.find(a => a.id === alertId) || MadTravelState.savedAlerts[0];
+      if (!item) return;
+
+      document.getElementById('chart-route-title').textContent = item.route;
+      document.getElementById('chart-sub-info').textContent = `${item.airline} • Harga terendah saat ini di ${item.bestOta}`;
+      document.getElementById('chart-target-price').textContent = formatMoney(item.targetPrice);
+      document.getElementById('chart-current-price').textContent = formatMoney(item.currentLowest);
+
+      const svg = document.getElementById('price-history-svg');
+      if (!svg) return;
+
+      const hist = item.history;
+      const minVal = Math.min(...hist, item.targetPrice) * 0.9;
+      const maxVal = Math.max(...hist, item.targetPrice) * 1.06;
+
+      const width = 620;
+      const height = 175;
+      const padX = 25;
+      const padY = 20;
+
+      const points = hist.map((val, idx) => {
+        const x = padX + (idx / (hist.length - 1)) * (width - padX * 2);
+        const y = padY + (1 - (val - minVal) / (maxVal - minVal)) * (height - padY);
+        return { x, y, val };
+      });
+
+      const targetY = padY + (1 - (item.targetPrice - minVal) / (maxVal - minVal)) * (height - padY);
+      const polylinePoints = points.map(p => `${p.x},${p.y}`).join(' ');
+      const areaPoints = `${points[0].x},${height} ${polylinePoints} ${points[points.length - 1].x},${height}`;
+
+      svg.innerHTML = `
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00B4A2" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#00B4A2" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Target Price Dashed Line -->
+        <line x1="${padX}" y1="${targetY}" x2="${width - padX}" y2="${targetY}" stroke="#FF5A36" stroke-width="2" stroke-dasharray="6 4" />
+        <text x="${padX + 6}" y="${targetY - 6}" fill="#FF5A36" font-size="11" font-weight="800">Target Alert (${formatMoney(item.targetPrice)})</text>
+
+        <!-- Area & Trend Line -->
+        <polygon points="${areaPoints}" fill="url(#chartGrad)" />
+        <polyline fill="none" stroke="#00B4A2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${polylinePoints}" />
+
+        <!-- Data Nodes -->
+        ${points.map((p, i) => `
+          <g>
+            <circle cx="${p.x}" cy="${p.y}" r="${i === points.length - 1 ? 7 : 5}" fill="${i === points.length - 1 ? '#10B981' : '#FFFFFF'}" stroke="#0F2942" stroke-width="2.5" />
+            <text x="${p.x}" y="${p.y - 11}" text-anchor="middle" fill="#0F2942" font-size="10.5" font-weight="800">
+              ${formatMoney(p.val)}
+            </text>
+          </g>
+        `).join('')}
+      `;
+    }
+
+    function selectAlertForChart(id) {
+      activeAlertId = id;
+      renderAlertsList();
+      renderAlertChart(id);
+    }
+
+    function deleteAlert(id) {
+      if (MadTravelState.savedAlerts.length <= 1) {
+        showToast('Tidak Bisa Dihapus', 'Minimal harus ada 1 rute dalam pantauan dashboard.', 'coral');
+        return;
+      }
+      MadTravelState.savedAlerts = MadTravelState.savedAlerts.filter(a => a.id !== id);
+      localStorage.setItem('madtravel_alerts', JSON.stringify(MadTravelState.savedAlerts));
+      activeAlertId = MadTravelState.savedAlerts[0].id;
+      renderAlertsList();
+      renderAlertChart(activeAlertId);
+      showToast('Pantauan Dihapus', 'Rute telah dihapus dari daftar pantauan.', 'sunny');
+    }
+
+    function simulatePriceDrop() {
+      const target = MadTravelState.savedAlerts.find(a => a.id === activeAlertId) || MadTravelState.savedAlerts[0];
+      if (!target) return;
+      const drop = Math.round(target.currentLowest * 0.08);
+      target.currentLowest = Math.max(350000, target.currentLowest - drop);
+      target.history.shift();
+      target.history.push(target.currentLowest);
+      localStorage.setItem('madtravel_alerts', JSON.stringify(MadTravelState.savedAlerts));
+
+      renderAlertsList();
+      renderAlertChart(target.id);
+      showToast('📲 WhatsApp Alert Terkirim!', `Harga ${target.route} baru saja turun ke ${formatMoney(target.currentLowest)} di ${target.bestOta}!`, 'lime');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAlertsList();
+      renderAlertChart(activeAlertId);
+
+      document.getElementById('create-alert-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const type = document.getElementById('alert-type').value;
+        const route = document.getElementById('alert-route').value;
+        const dateRange = document.getElementById('alert-dates').value;
+        const targetPrice = parseInt(document.getElementById('alert-target').value, 10) || 1200000;
+        const startPrice = Math.round(targetPrice * 1.08);
+
+        const newAlert = {
+          id: 'al-' + Date.now(),
+          type,
+          route,
+          dateRange,
+          targetPrice,
+          currentLowest: startPrice,
+          bestOta: type === 'flight' ? 'Tiket.com' : 'Agoda',
+          airline: type === 'flight' ? 'Semua Maskapai Langsung' : 'Kamar Deluxe + Sarapan',
+          trend: 'down',
+          dropPercent: 8,
+          channels: ['WhatsApp', 'Email'],
+          history: [
+            Math.round(targetPrice * 1.25),
+            Math.round(targetPrice * 1.21),
+            Math.round(targetPrice * 1.18),
+            Math.round(targetPrice * 1.16),
+            Math.round(targetPrice * 1.14),
+            Math.round(targetPrice * 1.11),
+            startPrice
+          ]
+        };
+
+        MadTravelState.savedAlerts.unshift(newAlert);
+        localStorage.setItem('madtravel_alerts', JSON.stringify(MadTravelState.savedAlerts));
+        activeAlertId = newAlert.id;
+        closeModal('new-alert-modal');
+        renderAlertsList();
+        renderAlertChart(activeAlertId);
+        showToast('Price Alert Berhasil Dibuat!', `Bot kami mulai memantau ${route} 24/7.`, 'lime');
+      });
+
+      window.onCurrencyChanged = () => {
+        renderAlertsList();
+        renderAlertChart(activeAlertId);
+      };
+    });
+  </script>
+</body>
+</html>

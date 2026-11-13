@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bandingkan Harga Hotel & Villa di Bali — MadTravel Metasearch</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .hotels-split-layout {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      align-items: start;
+      margin-top: 24px;
+    }
+
+    /* Quick Filter Bar */
+    .quick-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .filter-chip {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border-color);
+      background: var(--bg-sand);
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-chip:hover {
+      border-color: var(--border-bold);
+    }
+
+    .filter-chip.active {
+      background: var(--sunny);
+      border-color: var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    /* Hotel Comparison Card */
+    .hotel-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      margin-bottom: 20px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      transition: var(--transition);
+    }
+
+    .hotel-card.highlighted {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 4px rgba(255, 90, 54, 0.25), var(--shadow-pop);
+    }
+
+    .hotel-visual {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 2px solid var(--border-bold);
+      color: white;
+      position: relative;
+    }
+
+    .hotel-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ota-price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1.5px dashed var(--border-color);
+    }
+
+    .ota-box-mini {
+      padding: 9px 11px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-sand);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .ota-box-mini:hover {
+      border-color: var(--border-bold);
+      transform: translateY(-2px);
+    }
+
+    .ota-box-mini.best {
+      background: var(--bg-lime-tint);
+      border: 2px solid var(--lime);
+    }
+
+    /* Sticky Interactive Map Mockup */
+    .map-sticky-panel {
+      position: sticky;
+      top: 90px;
+      background: #C9F0EC;
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      height: calc(100vh - 120px);
+      min-height: 540px;
+      overflow: hidden;
+      position: sticky;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .map-canvas {
+      position: relative;
+      flex: 1;
+      background: 
+        radial-gradient(circle at 25% 30%, #FFF6E6 0%, #E2F1D8 45%, #A5E6DF 70%, #7CD8CE 100%);
+      overflow: hidden;
+    }
+
+    .map-pin {
+      position: absolute;
+      background: var(--bg-card);
+      color: var(--text-navy);
+      border: 2px solid var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+      border-radius: var(--radius-pill);
+      padding: 5px 11px;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .map-pin::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 7px 6px 0;
+      border-style: solid;
+      border-color: var(--border-bold) transparent;
+    }
+
+    .map-pin:hover, .map-pin.active {
+      background: var(--coral);
+      color: white;
+      transform: scale(1.14) translateY(-4px);
+      z-index: 20;
+    }
+
+    @media (max-width: 1024px) {
+      .hotels-split-layout {
+        grid-template-columns: 1fr;
+      }
+      .hotel-card {
+        grid-template-columns: 1fr;
+      }
+      .hotel-visual {
+        height: 170px;
+        border-right: none;
+        border-bottom: 2px solid var(--border-bold);
+      }
+      .ota-price-grid {
+        grid-template-columns: 1fr;
+      }
+      .map-sticky-panel {
+        position: static;
+        height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">🏨 HOTEL METASEARCH</span>
+        <span>Membandingkan tarif kamar yang sama di <strong>Agoda, Booking.com, Traveloka, Tiket.com & Website Resmi Resort</strong></span>
+      </div>
+      <div class="top-promo-utils">
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✈️</div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link active">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">📈 Price Alert <span class="nav-badge">PRO</span></a>
+        <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="price-alerts.html" class="btn btn-outline btn-sm">🔔 Lacak Harga Hotel</a>
+        <a href="pricing.html" class="btn btn-primary btn-sm">Coba Pro Gratis</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 24px;">
+    <!-- Hotel Search Bar -->
+    <div class="metasearch-box" style="padding: 18px 22px;">
+      <form onsubmit="event.preventDefault(); showToast('Memindai Tarif Kamar...', 'Harga terbaru dari Agoda, Booking.com, Traveloka & Tiket.com berhasil diperbarui!', 'turquoise');">
+        <div class="search-Input-grid" style="grid-template-columns: 1.6fr 1.2fr 1.1fr 1fr auto;">
+          <div class="search-field">
+            <div class="search-field-label">🏖️ Destinasi / Nama Properti</div>
+            <input type="text" class="search-field-input" value="Bali (Uluwatu, Canggu, Ubud)" />
+            <div class="search-field-sub">1.420 properti dibandingkan</div>
+          </div>
+          <div class="search-field">
+            <div class="search-field-label">📅 Check-In – Check-Out</div>
+            <input type="text" class="search-field-input" value="18 Des – 21 Des 2026" />
+            <div class="search-field-sub">3 Malam • Peak Season Deal</div>
+          </div>
+          <div class="search-field">
+            <div class="search-field-label">🛏️ Tamu & Kamar</div>
+            <input type="text" class="search-field-input" value="2 Dewasa • 1 Kamar" />
+            <div class="search-field-sub">Tampilkan harga total / per malam</div>
+          </div>
+          <div class="search-field">
+            <div class="search-field-label">🧾 Mode Tampilan Harga</div>
+            <select id="tax-mode-select" class="search-field-input" style="background:transparent; cursor:pointer;">
+              <option value="base">Harga Dasar / Malam</option>
+              <option value="net" selected>Harga Final (+Pajak 21%)</option>
+            </select>
+            <div class="search-field-sub" style="color: var(--lime-dark); font-weight: 700;">Anti Jebakan Pajak OTA!</div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="height: 100%; min-height: 62px;">🔍 Cari Hotel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Quick Filter Chips -->
+    <div class="quick-filter-bar">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span style="font-weight: 800; font-size: 0.85rem; margin-right: 4px;">⚡ Filter Cepat:</span>
+        <button class="filter-chip active" data-hotel-filter="all" onclick="filterHotels('all', this)">🌟 Semua Properti (4)</button>
+        <button class="filter-chip" data-hotel-filter="pool" onclick="filterHotels('pool', this)">🏊 Private Pool Villa</button>
+        <button class="filter-chip" data-hotel-filter="breakfast" onclick="filterHotels('breakfast', this)">🥐 Gratis Sarapan</button>
+        <button class="filter-chip" data-hotel-filter="beach" onclick="filterHotels('beach', this)">🌊 Tepi Pantai</button>
+      </div>
+      <div style="font-size: 0.82rem; font-weight: 700; color: var(--turquoise-dark);">
+        💡 Selisih harga kamar yang sama antar OTA hari ini mencapai <strong>Rp 640.000/malam!</strong>
+      </div>
+    </div>
+
+    <!-- Split Layout: Left Hotel Cards, Right Interactive Map -->
+    <div class="hotels-split-layout">
+      <section id="hotel-results-container"></section>
+
+      <!-- Interactive Tropical Bali Map Mockup -->
+      <aside class="map-sticky-panel">
+        <div style="padding: 14px 18px; background: var(--bg-card); border-bottom: 2px solid var(--border-bold); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 800; font-size: 0.92rem;">🗺️ Peta Perbandingan Harga Bali</div>
+            <div style="font-size: 0.75rem; color: var(--text-slate);">Klik pin harga di peta untuk melihat detail kamar</div>
+          </div>
+          <span class="badge badge-lime">Live Sync</span>
+        </div>
+
+        <div class="map-canvas" id="bali-map-canvas">
+          <!-- Decorative SVG Roads & Coastline -->
+          <svg width="100%" height="100%" viewBox="0 0 500 500" preserveAspectRatio="none" style="position:absolute; inset:0; opacity:0.55;">
+            <path d="M50,90 Q180,40 320,100 T460,260 Q410,410 250,450 T60,310 Z" fill="#DCFCE7" stroke="#00B4A2" stroke-width="4" stroke-dasharray="8 4"/>
+            <path d="M120,150 Q240,220 340,170 T260,390" fill="none" stroke="#F59E0B" stroke-width="3" stroke-dasharray="5 5"/>
+            <text x="235" y="135" fill="#0F2942" font-size="13" font-weight="800" opacity="0.6">🌿 UBUD</text>
+            <text x="125" y="275" fill="#0F2942" font-size="13" font-weight="800" opacity="0.6">🏄‍♂️ CANGGU</text>
+            <text x="195" y="420" fill="#0F2942" font-size="13" font-weight="800" opacity="0.6">🌅 ULUWATU</text>
+            <text x="330" y="360" fill="#0F2942" font-size="13" font-weight="800" opacity="0.6">🏖️ NUSA DUA</text>
+          </svg>
+
+          <!-- Dynamic Map Pins injected by JS -->
+          <div id="map-pins-layer"></div>
+        </div>
+
+        <div id="map-selected-preview" style="padding: 14px 18px; background: var(--bg-card); border-top: 2px solid var(--border-bold);">
+          <div class="flex items-center justify-between">
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 800; color: var(--turquoise-dark); text-transform: uppercase;">Pin Terpilih di Peta</div>
+              <div id="map-preview-title" style="font-weight: 800; font-size: 0.95rem;">Alila Villas Uluwatu</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openRoomModal('ht-1')">Bandingkan Kamar ➔</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Modal: Room-by-Room Multi-OTA Price Comparison -->
+  <div class="modal-backdrop" id="room-compare-modal" onclick="if(event.target===this) closeModal('room-compare-modal')">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="flex justify-between items-start" style="margin-bottom: 16px;">
+        <div>
+          <span class="badge badge-sunny" style="margin-bottom: 6px;">🛏️ PERBANDINGAN TIPE KAMAR & OTA</span>
+          <h3 class="title-h3" id="modal-hotel-name">Detail Perbandingan Kamar</h3>
+          <p id="modal-hotel-area" style="font-size: 0.85rem; color: var(--text-slate);"></p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('room-compare-modal')">✕ Tutup</button>
+      </div>
+
+      <div id="modal-rooms-body" style="display: flex; flex-direction: column; gap: 14px; max-height: 65vh; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel Hotel Metasearch • Bandingkan harga jujur dengan pajak transparan.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="flights.html">Tiket Pesawat ke Bali</a>
+        <a href="price-alerts.html">Pasang Hotel Price Alert</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    const hotelsCatalog = [
+      {
+        id: 'ht-1',
+        name: 'The Kayon Jungle Resort',
+        area: '🌿 Payangan, Ubud • Tepi Lembah Tropis',
+        stars: '⭐⭐⭐⭐⭐',
+        rating: '4.96',
+        reviews: '3.420 ulasan',
+        emoji: '🌴🏊‍♂️',
+        gradient: 'linear-gradient(135deg, #00B4A2 0%, #0F2942 100%)',
+        tags: ['pool', 'breakfast'],
+        perks: ['Gratis Sarapan Floating', 'Infinity Pool 3 Tingkat', 'Pembatalan Gratis'],
+        mapPos: { top: '24%', left: '52%' },
+        otas: [
+          { name: 'Agoda', style: 'ota-agoda', basePrice: 2450000, note: 'Gratis Sarapan + Cashback', best: true },
+          { name: 'Booking.com', style: 'ota-booking', basePrice: 2790000, note: 'Bayar saat Check-in' },
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 2680000, note: 'Kupon EPIC Sale' }
+        ],
+        rooms: [
+          { type: 'Kayon Premier Suite', agoda: 2450000, traveloka: 2680000, booking: 2790000, inclusion: 'Sarapan 2 Orang + Afternoon Tea' },
+          { type: 'Jungle Pool Villa (Private Pool)', agoda: 3690000, traveloka: 3850000, booking: 4120000, inclusion: 'Private Infinity Pool + Butler 24 Jam' }
+        ]
+      },
+      {
+        id: 'ht-2',
+        name: 'Potato Head Suites & Studios',
+        area: '🌊 Seminyak & Petitenget • Akses Langsung Pantai',
+        stars: '⭐⭐⭐⭐⭐',
+        rating: '4.91',
+        reviews: '5.180 ulasan',
+        emoji: '🏖️🍹',
+        gradient: 'linear-gradient(135deg, #FF5A36 0%, #D97706 100%)',
+        tags: ['beach', 'breakfast'],
+        perks: ['Akses VIP Beach Club', 'Zero-Waste Luxury', 'Welcome Sunset Cocktail'],
+        mapPos: { top: '56%', left: '28%' },
+        otas: [
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 2890000, note: 'Termasuk Daybed Beach Club', best: true },
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 3120000, note: 'Gratis Sarapan Pagi' },
+          { name: 'Agoda', style: 'ota-agoda', basePrice: 3350000, note: 'Free Cancellation' }
+        ],
+        rooms: [
+          { type: 'Sunrise Studio King', agoda: 3350000, traveloka: 2890000, booking: 3250000, inclusion: 'Gratis Masuk Beach Club + Sarapan' },
+          { type: 'Bamboo Pool Suite', agoda: 4650000, traveloka: 4390000, booking: 4800000, inclusion: 'Private Plunge Pool + Sunset Drink' }
+        ]
+      },
+      {
+        id: 'ht-3',
+        name: 'Uluwatu Cliff Ocean Villa',
+        area: '🌅 Pecatu, Uluwatu • Tebing Laut Samudra Hindia',
+        stars: '⭐⭐⭐⭐⭐',
+        rating: '4.94',
+        reviews: '2.190 ulasan',
+        emoji: '🌅🌊',
+        gradient: 'linear-gradient(135deg, #4F46E5 0%, #00B4A2 100%)',
+        tags: ['pool', 'beach', 'breakfast'],
+        perks: ['Private Cliff Pool', 'Shuttle Gratis ke Pantai Padang-Padang', 'Sarapan di Villa'],
+        mapPos: { top: '78%', left: '38%' },
+        otas: [
+          { name: 'Tiket.com', style: 'ota-tiket', basePrice: 1950000, note: 'Flash Deal Hemat 28%!', best: true },
+          { name: 'Agoda', style: 'ota-agoda', basePrice: 2240000, note: 'Termasuk Sarapan' },
+          { name: 'Booking.com', style: 'ota-booking', basePrice: 2590000, note: 'Genius Discount Lv.2' }
+        ],
+        rooms: [
+          { type: 'One-Bedroom Ocean Pool Villa', agoda: 2240000, traveloka: 2150000, booking: 1950000, inclusion: 'Private Pool + Sarapan Terapung' },
+          { type: 'Two-Bedroom Family Cliff Residence', agoda: 3890000, traveloka: 3750000, booking: 3600000, inclusion: 'Untuk 4 Dewasa + BBQ Seafood Gratis' }
+        ]
+      },
+      {
+        id: 'ht-4',
+        name: 'Canggu Tropical Surf Resort',
+        area: '🏄‍♂️ Batu Bolong, Canggu • 100m dari Pantai Surf',
+        stars: '⭐⭐⭐⭐',
+        rating: '4.85',
+        reviews: '4.090 ulasan',
+        emoji: '🏄‍♂️🥥',
+        gradient: 'linear-gradient(135deg, #10B981 0%, #F59E0B 100%)',
+        tags: ['beach'],
+        perks: ['Co-Working Space Cepat', 'Lagoon Pool Luas', 'Sewa Papan Surf Gratis'],
+        mapPos: { top: '48%', left: '22%' },
+        otas: [
+          { name: 'Agoda', style: 'ota-agoda', basePrice: 1120000, note: 'Diskon Member Rahasia', best: true },
+          { name: 'Traveloka', style: 'ota-traveloka', basePrice: 1250000, note: 'Bisa Bayar saat Check-In' },
+          { name: 'Trip.com', style: 'ota-trip', basePrice: 1340000, note: 'Gratis Kopi Pagi' }
+        ],
+        rooms: [
+          { type: 'Tropical Lagoon Access Room', agoda: 1120000, traveloka: 1250000, booking: 1340000, inclusion: 'Akses Kolam Langsung dari Teras' },
+          { type: 'Roof Deck Surf Loft', agoda: 1490000, traveloka: 1580000, booking: 1620000, inclusion: 'Balkon Sunset + Gratis Kursus Surf 1 Jam' }
+        ]
+      }
+    ];
+
+    let activeHotelFilter = 'all';
+    let selectedHotelId = 'ht-1';
+
+    function getTaxMultiplier() {
+      const mode = document.getElementById('tax-mode-select')?.value || 'net';
+      return mode === 'net' ? 1.21 : 1.0;
+    }
+
+    function renderHotels() {
+      const container = document.getElementById('hotel-results-container');
+      const pinsLayer = document.getElementById('map-pins-layer');
+      if (!container || !pinsLayer) return;
+
+      const mult = getTaxMultiplier();
+      const taxLabel = mult > 1 ? 'Harga Final (Termasuk Pajak 21%)' : 'Harga Dasar (Belum Pajak 21%)';
+
+      const list = hotelsCatalog.filter(h => {
+        if (activeHotelFilter === 'all') return true;
+        return h.tags.includes(activeHotelFilter);
+      });
+
+      container.innerHTML = list.map(h => {
+        const bestOta = h.otas[0];
+        const maxOta = h.otas[h.otas.length - 1];
+        const saveAmount = Math.round((maxOta.basePrice - bestOta.basePrice) * mult);
+
+        return `
+          <article class="hotel-card ${h.id === selectedHotelId ? 'highlighted' : ''}" id="card-${h.id}" onmouseenter="highlightPin('${h.id}')">
+            <div class="hotel-visual" style="background: ${h.gradient};">
+              <div class="flex justify-between items-center">
+                <span class="badge badge-pop badge-sunny">Hemat ${formatMoney(saveAmount)}</span>
+                <span style="font-size: 0.78rem; font-weight: 800; background: rgba(0,0,0,0.35); padding: 3px 8px; border-radius: 99px;">⭐ ${h.rating}</span>
+              </div>
+              <div style="font-size: 3rem; text-align: center; margin: 14px 0;">${h.emoji}</div>
+              <div style="font-size: 0.75rem; opacity: 0.92; font-weight: 700;">${h.stars} • ${h.reviews}</div>
+            </div>
+
+            <div class="hotel-content">
+              <div>
+                <div class="flex justify-between items-start gap-2">
+                  <div>
+                    <h3 class="title-h3">${h.name}</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-slate); margin-top: 2px;">${h.area}</p>
+                  </div>
+                  <button class="btn btn-outline btn-sm" onclick="showToast('Hotel Price Alert Aktif!', 'Kami akan kirim WA jika tarif ${h.name} turun.', 'lime')" title="Lacak Harga Hotel Ini">🔔</button>
+                </div>
+
+                <div class="flex gap-2 flex-wrap" style="margin-top: 10px;">
+                  ${h.perks.map(p => `<span class="badge badge-turquoise" style="font-size: 0.72rem;">✓ ${p}</span>`).join('')}
+                </div>
+              </div>
+
+              <!-- 3-OTA Side-by-Side Comparison Boxes -->
+              <div>
+                <div class="ota-price-grid">
+                  ${h.otas.map(o => {
+                    const price = Math.round(o.basePrice * mult);
+                    return `
+                      <div class="ota-box-mini ${o.best ? 'best' : ''}" onclick="openRoomModal('${h.id}')">
+                        <div class="flex justify-between items-center" style="margin-bottom: 4px;">
+                          <span class="ota-badge ${o.style}" style="font-size: 0.7rem; padding: 2px 7px;">${o.name}</span>
+                          ${o.best ? '<span style="font-size:0.65rem; font-weight:800; color:var(--lime-dark);">TERMURAH</span>' : ''}
+                        </div>
+                        <div class="text-price" style="font-size: 1.05rem; color: ${o.best ? 'var(--lime-dark)' : 'var(--text-navy)'};">
+                          ${formatMoney(price)}
+                        </div>
+                        <div style="font-size: 0.68rem; color: var(--text-slate); margin-top: 2px;">${o.note}</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+
+                <div class="flex justify-between items-center flex-wrap gap-2" style="margin-top: 12px;">
+                  <span style="font-size: 0.74rem; color: var(--text-muted);">🧾 ${taxLabel}</span>
+                  <div class="flex gap-2">
+                    <button class="btn btn-outline btn-sm" onclick="openRoomModal('${h.id}')">🛏️ Bandingkan Tipe Kamar</button>
+                    <button class="btn btn-primary btn-sm" onclick="showToast('Membuka ${bestOta.name}...', 'Mengunci harga termurah untuk ${h.name}!', 'lime')">
+                      Pesan di ${bestOta.name} ➔
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Render Map Pins
+      pinsLayer.innerHTML = list.map(h => {
+        const bestPrice = Math.round(h.otas[0].basePrice * mult);
+        return `
+          <button
+            class="map-pin ${h.id === selectedHotelId ? 'active' : ''}"
+            id="pin-${h.id}"
+            style="top: ${h.mapPos.top}; left: ${h.mapPos.left};"
+            onclick="selectHotelFromMap('${h.id}')"
+          >
+            ${formatMoney(bestPrice)}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function highlightPin(hotelId) {
+      selectedHotelId = hotelId;
+      document.querySelectorAll('.map-pin').forEach(p => p.classList.remove('active'));
+      document.getElementById(`pin-${hotelId}`)?.classList.add('active');
+      const found = hotelsCatalog.find(h => h.id === hotelId);
+      if (found) {
+        const titleEl = document.getElementById('map-preview-title');
+        if (titleEl) titleEl.textContent = `${found.name} (${found.otas[0].name})`;
+      }
+    }
+
+    function selectHotelFromMap(hotelId) {
+      highlightPin(hotelId);
+      document.querySelectorAll('.hotel-card').forEach(c => c.classList.remove('highlighted'));
+      const card = document.getElementById(`card-${hotelId}`);
+      if (card) {
+        card.classList.add('highlighted');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function filterHotels(tag, btn) {
+      activeHotelFilter = tag;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderHotels();
+    }
+
+    function openRoomModal(hotelId) {
+      const hotel = hotelsCatalog.find(h => h.id === hotelId);
+      if (!hotel) return;
+      const mult = getTaxMultiplier();
+
+      document.getElementById('modal-hotel-name').textContent = hotel.name;
+      document.getElementById('modal-hotel-area').textContent = hotel.area;
+
+      const body = document.getElementById('modal-rooms-body');
+      body.innerHTML = hotel.rooms.map(rm => {
+        const pAgoda = Math.round(rm.agoda * mult);
+        const pTrav = Math.round(rm.traveloka * mult);
+        const pBook = Math.round(rm.booking * mult);
+        const minP = Math.min(pAgoda, pTrav, pBook);
+
+        return `
+          <div style="border: 2px solid var(--border-bold); border-radius: var(--radius-md); padding: 16px; background: var(--bg-sand);">
+            <div class="flex justify-between items-center flex-wrap gap-2" style="margin-bottom: 10px;">
+              <div>
+                <div style="font-weight: 800; font-size: 1rem;">🛏️ ${rm.type}</div>
+                <div style="font-size: 0.78rem; color: var(--turquoise-dark); font-weight: 700;">✨ ${rm.inclusion}</div>
+              </div>
+              <span class="badge badge-lime">Termurah ${formatMoney(minP)}</span>
+            </div>
+
+            <div class="grid-3" style="gap: 10px;">
+              <div style="background: white; padding: 10px; border-radius: 10px; border: 1.5px solid ${pAgoda === minP ? 'var(--lime)' : 'var(--border-color)'};">
+                <span class="ota-badge ota-agoda">Agoda</span>
+                <div class="text-price" style="font-size: 1rem; margin: 6px 0;">${formatMoney(pAgoda)}</div>
+                <button class="btn btn-turquoise btn-sm" style="width:100%;" onclick="closeModal('room-compare-modal'); showToast('Membuka Agoda...', 'Kamar ${rm.type} berhasil dipilih!', 'lime')">Pilih ↗</button>
+              </div>
+              <div style="background: white; padding: 10px; border-radius: 10px; border: 1.5px solid ${pTrav === minP ? 'var(--lime)' : 'var(--border-color)'};">
+                <span class="ota-badge ota-traveloka">Traveloka</span>
+                <div class="text-price" style="font-size: 1rem; margin: 6px 0;">${formatMoney(pTrav)}</div>
+                <button class="btn btn-outline btn-sm" style="width:100%;" onclick="closeModal('room-compare-modal'); showToast('Membuka Traveloka...', 'Kamar ${rm.type} berhasil dipilih!', 'lime')">Pilih ↗</button>
+              </div>
+              <div style="background: white; padding: 10px; border-radius: 10px; border: 1.5px solid ${pBook === minP ? 'var(--lime)' : 'var(--border-color)'};">
+                <span class="ota-badge ota-booking">Booking.com</span>
+                <div class="text-price" style="font-size: 1rem; margin: 6px 0;">${formatMoney(pBook)}</div>
+                <button class="btn btn-outline btn-sm" style="width:100%;" onclick="closeModal('room-compare-modal'); showToast('Membuka Booking.com...', 'Kamar ${rm.type} berhasil dipilih!', 'lime')">Pilih ↗</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      openModal('room-compare-modal');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHotels();
+      document.getElementById('tax-mode-select')?.addEventListener('change', () => {
+        renderHotels();
+        showToast('Mode Pajak Diubah', 'Seluruh tarif hotel & pin peta telah disesuaikan.', 'sunny');
+      });
+      window.onCurrencyChanged = () => renderHotels();
+    });
+  </script>
+</body>
+</html>

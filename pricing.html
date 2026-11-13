@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paket Langganan SaaS & B2B White-Label Portal — MadTravel</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .billing-toggle-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-pill);
+      padding: 6px;
+      box-shadow: var(--shadow-pop-sm);
+      margin-top: 20px;
+    }
+
+    .billing-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-weight: 800;
+      font-size: 0.88rem;
+      transition: var(--transition);
+    }
+
+    .billing-btn.active {
+      background: var(--sunny);
+      border: 2px solid var(--border-bold);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .pricing-card.popular {
+      background: linear-gradient(180deg, #FFFDF8 0%, #E6F8F6 100%);
+      transform: translateY(-8px);
+      box-shadow: 8px 10px 0px var(--border-bold);
+    }
+
+    .feature-list {
+      margin: 22px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      font-size: 0.9rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    /* B2B White-Label Studio */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: center;
+      margin-top: 28px;
+    }
+
+    .code-snippet-box {
+      background: #0F2942;
+      color: #A7F3D0;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-bold);
+      overflow-x: auto;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .pricing-grid, .studio-grid {
+        grid-template-columns: 1fr;
+      }
+      .pricing-card.popular {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">💎 MONETISASI & B2B API</span>
+        <span>Hemat jutaan rupiah dengan <strong>Nomad Pro</strong> atau pasang mesin metasearch kami di website Anda!</span>
+      </div>
+      <div class="top-promo-utils">
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">✈️</div>
+        <span>MadTravel</span>
+        <span class="brand-tag">METASEARCH+</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">📈 Price Alert <span class="nav-badge">PRO</span></a>
+        <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+        <a href="pricing.html" class="nav-link active">💎 SaaS & API</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#b2b-widget" class="btn btn-outline btn-sm">🧩 White-Label Widget</a>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Akun Demo Pro Diaktifkan!', 'Selamat mencoba seluruh fitur Nomad Pro selama 14 hari.', 'lime')">Mulai Trial 14 Hari</button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 40px;">
+    <!-- Pricing Header -->
+    <div style="text-align: center; max-width: 720px; margin: 0 auto;">
+      <span class="badge badge-pop badge-sunny" style="margin-bottom: 10px;">💎 PAKET LANGGANAN SAAS TRAVEL</span>
+      <h1 class="title-display">Satu Kali Dapet Tiket Promo, Langsung Balik Modal Setahun!</h1>
+      <p style="color: var(--text-slate); font-size: 1.05rem; margin-top: 10px;">
+        Pilih paket untuk traveler individu, pemburu tiket murah (Nomad Pro), atau lisensi API & White-Label untuk bisnis agen travel Anda.
+      </p>
+
+      <div class="billing-toggle-box">
+        <button class="billing-btn" id="btn-monthly" onclick="setBillingCycle('monthly')">Tagihan Bulanan</button>
+        <button class="billing-btn active" id="btn-yearly" onclick="setBillingCycle('yearly')">
+          Tahunan <span class="badge badge-coral" style="margin-left: 4px;">Hemat 35% 🔥</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3-Tier Pricing Grid -->
+    <div class="pricing-grid">
+      <!-- Tier 1: Free Explorer -->
+      <div class="pricing-card">
+        <div>
+          <span class="badge badge-turquoise">🌴 UNTUK LIBURAN SANTAI</span>
+          <h3 class="title-h2" style="margin-top: 10px;">Explorer Free</h3>
+          <p style="font-size: 0.86rem; color: var(--text-slate); margin-top: 4px;">Bandingkan harga pesawat & hotel tanpa biaya selamanya.</p>
+
+          <div style="margin-top: 20px;">
+            <span class="text-price" style="font-size: 2.2rem;">Rp 0</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);"> / selamanya</span>
+          </div>
+
+          <ul class="feature-list">
+            <li><span>✅</span> <span>Metasearch real-time 120+ OTA & Maskapai</span></li>
+            <li><span>✅</span> <span>Kalender Heatmap Harga Termurah Bulanan</span></li>
+            <li><span>✅</span> <span>Maksimal <strong>2 Rute Pantauan</strong> Price Alert (via Email)</span></li>
+            <li><span>✅</span> <span>3x Generate AI Smart Trip Planner / bulan</span></li>
+            <li style="color: var(--text-muted);"><span>✖</span> <span>Tanpa Notifikasi Instan WhatsApp & Telegram</span></li>
+            <li style="color: var(--text-muted);"><span>✖</span> <span>Tanpa Akses Radar Error Fare Real-time</span></li>
+          </ul>
+        </div>
+
+        <a href="index.html" class="btn btn-outline" style="width: 100%;">Gunakan Versi Gratis</a>
+      </div>
+
+      <!-- Tier 2: Nomad Pro (B2C Flagship) -->
+      <div class="pricing-card popular">
+        <div style="position: absolute; top: -14px; right: 24px;">
+          <span class="badge badge-pop badge-sunny">🏆 PALING POPULER</span>
+        </div>
+        <div>
+          <span class="badge badge-coral">🔥 PEMBURU TIKET MURAH</span>
+          <h3 class="title-h2" style="margin-top: 10px;">Nomad Pro</h3>
+          <p style="font-size: 0.86rem; color: var(--text-slate); margin-top: 4px;">Otomasi penuh untuk sikat error fare & promo tengah malam.</p>
+
+          <div style="margin-top: 20px;">
+            <span class="text-price" style="font-size: 2.2rem; color: var(--coral);" id="pro-price-text">Rp 49.000</span>
+            <span style="font-size: 0.85rem; color: var(--text-slate);" id="pro-period-text"> / bulan (dibayar tahunan)</span>
+          </div>
+
+          <ul class="feature-list">
+            <li><span>✅</span> <span><strong>Unlimited Price Alerts</strong> via <strong>WhatsApp & Telegram</strong> (Interval scan 60 detik)</span></li>
+            <li><span>✅</span> <span><strong>Error Fare Radar VIP</strong> — Terima bocoran salah harga maskapai 30 menit lebih awal</span></li>
+            <li><span>✅</span> <span><strong>AI Buy/Wait Predictor</strong> dengan garansi selisih harga</span></li>
+            <li><span>✅</span> <span><strong>Unlimited AI Trip Planner</strong> + Export Itinerary ke PDF & Google Maps</span></li>
+            <li><span>✅</span> <span>Kalkulator Bagasi & Pajak Otomatis Bebas Iklan</span></li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%;" onclick="showToast('Selamat Bergabung di Nomad Pro! 🎉', 'Masa percobaan gratis 14 hari Anda telah aktif.', 'lime')">
+          🚀 Coba Gratis 14 Hari
+        </button>
+      </div>
+
+      <!-- Tier 3: B2B Agency & White-Label API -->
+      <div class="pricing-card">
+        <div>
+          <span class="badge badge-purple">🏢 UNTUK AGEN, BLOGGER & KORPORAT</span>
+          <h3 class="title-h2" style="margin-top: 10px;">B2B Partner & API</h3>
+          <p style="font-size: 0.86rem; color: var(--text-slate); margin-top: 4px;">Pasang mesin metasearch MadTravel dengan brand Anda sendiri.</p>
+
+          <div style="margin-top: 20px;">
+            <span class="text-price" style="font-size: 2.2rem; color: var(--turquoise-dark);" id="b2b-price-text">Rp 499.000</span>
+            <span style="font-size: 0.85rem; color: var(--text-slate);"> / bulan + Bagi Hasil Afiliasi</span>
+          </div>
+
+          <ul class="feature-list">
+            <li><span>✅</span> <span><strong>Custom White-Label Search Widget</strong> (Domain & Logo Travel Anda sendiri)</span></li>
+            <li><span>✅</span> <span><strong>70% Komisi Afiliasi OTA</strong> langsung masuk ke saldo dashboard Anda</span></li>
+            <li><span>✅</span> <span>Akses <strong>REST JSON API</strong> (100.000 request / bulan)</span></li>
+            <li><span>✅</span> <span>Multi-User Team Seat (Hingga 10 Agen Travel)</span></li>
+            <li><span>✅</span> <span>Laporan Analitik Klik, Konversi & Revenue Real-Time</span></li>
+          </ul>
+        </div>
+
+        <a href="#b2b-widget" class="btn btn-turquoise" style="width: 100%;">Buka B2B Widget Studio ⇩</a>
+      </div>
+    </div>
+
+    <!-- Interactive B2B White-Label Widget Customizer & Affiliate Calculator -->
+    <section id="b2b-widget" style="margin-top: 72px;">
+      <div class="card-pop" style="background: var(--bg-sand-alt); padding: 36px;">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">🧩 B2B WHITE-LABEL WIDGET STUDIO & AFFILIATE SIMULATOR</span>
+            <h2 class="title-h1">Ubah Trafik Website / Blog Anda Jadi Mesin Komisi Travel!</h2>
+            <p style="color: var(--text-slate);">
+              Kustomisasi tampilan mesin pencari metasearch di bawah ini, lalu salin 1 baris kode HTML ke website Anda.
+            </p>
+          </div>
+        </div>
+
+        <div class="studio-grid">
+          <!-- Left Controls & Revenue Calculator -->
+          <div style="background: var(--bg-card); border: 2px solid var(--border-bold); border-radius: var(--radius-lg); padding: 22px;">
+            <h3 class="title-h3" style="margin-bottom: 14px;">🎨 Kustomisasi Brand & Estimasi Komisi</h3>
+
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 800;">Nama Brand / Agen Travel Anda</label>
+              <input type="text" id="wl-brand-input" value="NusaTrip Explorer" style="width:100%; background:var(--bg-sand); border:2px solid var(--border-bold); border-radius:var(--radius-sm); padding:8px 12px; font-weight:700; margin-top:4px;" />
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <label style="font-size: 0.8rem; font-weight: 800;">Warna Aksen Utama Widget</label>
+              <div class="flex gap-2" style="margin-top: 6px;">
+                <button type="button" class="btn btn-sm" style="background:#FF5A36; color:white; border:2px solid #0F2942;" onclick="setWidgetTheme('#FF5A36', 'Hibiscus Coral')">Coral</button>
+                <button type="button" class="btn btn-sm" style="background:#00B4A2; color:white; border:2px solid #0F2942;" onclick="setWidgetTheme('#00B4A2', 'Lagoon Turquoise')">Turquoise</button>
+                <button type="button" class="btn btn-sm" style="background:#7C3AED; color:white; border:2px solid #0F2942;" onclick="setWidgetTheme('#7C3AED', 'Royal Purple')">Purple</button>
+                <button type="button" class="btn btn-sm" style="background:#0F2942; color:white; border:2px solid #0F2942;" onclick="setWidgetTheme('#0F2942', 'Ocean Navy')">Navy</button>
+              </div>
+            </div>
+
+            <!-- Affiliate Revenue Estimator -->
+            <div style="padding-top: 14px; border-top: 1.5px dashed var(--border-color); margin-top: 14px;">
+              <div class="flex justify-between items-center">
+                <label style="font-size: 0.8rem; font-weight: 800;">📈 Pengunjung Website Anda / Bulan</label>
+                <span id="visitor-count-label" style="font-weight: 800; color: var(--turquoise-dark);">25.000 pengunjung</span>
+              </div>
+              <input type="range" id="visitor-slider" min="5000" max="200000" step="5000" value="25000" style="width:100%; accent-color:var(--coral); margin:8px 0; cursor:pointer;" />
+              <div style="background: var(--bg-lime-tint); border: 2px solid var(--lime); border-radius: var(--radius-md); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 0.74rem; font-weight: 800; color: var(--lime-dark);">ESTIMASI KOMISI AFILIASI / BULAN</div>
+                  <div style="font-size: 0.72rem; color: var(--text-slate);">Berdasarkan rata-rata konversi booking 3.2%</div>
+                </div>
+                <div class="text-price" style="font-size: 1.4rem; color: var(--lime-dark);" id="affiliate-earning-display">Rp 14.400.000</div>
+              </div>
+            </div>
+
+            <div class="code-snippet-box" id="embed-code-box">
+              &lt;script src="https://cdn.madtravel.id/widget.js" data-partner="nusatrip-explorer" data-theme="#FF5A36"&gt;&lt;/script&gt;
+            </div>
+            <button class="btn btn-sunny btn-sm" style="width: 100%; margin-top: 10px;" onclick="showToast('Kode Widget Disalin!', 'Tempelkan script ini di halaman WordPress, Webflow, atau HTML Anda.', 'lime')">
+              📋 Salin Kode Embed HTML
+            </button>
+          </div>
+
+          <!-- Right Live White-Label Widget Preview -->
+          <div>
+            <div style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--text-slate); margin-bottom: 8px;">
+              👁️ Live Preview Widget di Website Partner Anda:
+            </div>
+            <div id="wl-preview-card" style="background: white; border: 3px solid var(--border-bold); border-radius: var(--radius-xl); box-shadow: var(--shadow-pop); overflow: hidden;">
+              <div id="wl-preview-header" style="background: #FF5A36; color: white; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-bold);">
+                <div>
+                  <div style="font-size: 0.72rem; font-weight: 800; opacity: 0.9;">POWERED BY MADTRAVEL ENGINE</div>
+                  <div style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700;" id="wl-preview-brand">NusaTrip Explorer — Cari Tiket & Hotel Termurah</div>
+                </div>
+                <span class="badge badge-sunny">120+ OTA</span>
+              </div>
+
+              <div style="padding: 22px;">
+                <div class="grid-2" style="gap: 12px; margin-bottom: 12px;">
+                  <div class="search-field">
+                    <div class="search-field-label">🛫 Keberangkatan</div>
+                    <div style="font-weight: 800;">Jakarta (CGK)</div>
+                  </div>
+                  <div class="search-field">
+                    <div class="search-field-label">🛬 Tujuan Liburan</div>
+                    <div style="font-weight: 800;">Denpasar, Bali (DPS)</div>
+                  </div>
+                </div>
+                <div class="grid-2" style="gap: 12px; margin-bottom: 16px;">
+                  <div class="search-field">
+                    <div class="search-field-label">📅 Tanggal</div>
+                    <div style="font-weight: 800;">18 Des – 23 Des 2026</div>
+                  </div>
+                  <div class="search-field">
+                    <div class="search-field-label">👥 Penumpang</div>
+                    <div style="font-weight: 800;">2 Dewasa • Ekonomi</div>
+                  </div>
+                </div>
+                <a href="flights.html" id="wl-preview-btn" class="btn btn-primary" style="width: 100%; background: #FF5A36;">
+                  🔍 Bandingkan Harga Sekarang
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel SaaS & B2B Partner Network • Transparan, Cepat & Menguntungkan.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="flights.html">Pesawat</a>
+        <a href="hotels.html">Hotel</a>
+        <a href="price-alerts.html">Price Alert</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    let currentBilling = 'yearly';
+    let currentWidgetColor = '#FF5A36';
+
+    function setBillingCycle(mode) {
+      currentBilling = mode;
+      document.getElementById('btn-monthly').classList.toggle('active', mode === 'monthly');
+      document.getElementById('btn-yearly').classList.toggle('active', mode === 'yearly');
+
+      const proPrice = mode === 'yearly' ? 49000 : 75000;
+      const b2bPrice = mode === 'yearly' ? 499000 : 699000;
+
+      document.getElementById('pro-price-text').textContent = formatMoney(proPrice);
+      document.getElementById('pro-period-text').textContent = mode === 'yearly' ? ' / bulan (dibayar tahunan)' : ' / bulan';
+      document.getElementById('b2b-price-text').textContent = formatMoney(b2bPrice);
+    }
+
+    function setWidgetTheme(hexColor, colorName) {
+      currentWidgetColor = hexColor;
+      document.getElementById('wl-preview-header').style.background = hexColor;
+      document.getElementById('wl-preview-btn').style.background = hexColor;
+      updateEmbedSnippet();
+      showToast('Tema Widget Diubah', `Warna widget diatur ke ${colorName}.`, 'turquoise');
+    }
+
+    function updateEmbedSnippet() {
+      const brand = document.getElementById('wl-brand-input')?.value || 'Partner Travel';
+      const slug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      document.getElementById('wl-preview-brand').textContent = `${brand} — Cari Tiket & Hotel Termurah`;
+      document.getElementById('embed-code-box').textContent = `<script src="https://cdn.madtravel.id/widget.js" data-partner="${slug}" data-theme="${currentWidgetColor}"><\/script>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('wl-brand-input')?.addEventListener('input', updateEmbedSnippet);
+
+      document.getElementById('visitor-slider')?.addEventListener('input', (e) => {
+        const visitors = parseInt(e.target.value, 10);
+        document.getElementById('visitor-count-label').textContent = visitors.toLocaleString('id-ID') + ' pengunjung';
+        // Assume 3.2% conversion & Rp 18.000 avg commission per booking
+        const estIdr = Math.round(visitors * 0.032 * 18000);
+        document.getElementById('affiliate-earning-display').textContent = formatMoney(estIdr);
+      });
+
+      window.onCurrencyChanged = () => {
+        setBillingCycle(currentBilling);
+        const visitors = parseInt(document.getElementById('visitor-slider')?.value || '25000', 10);
+        document.getElementById('affiliate-earning-display').textContent = formatMoney(Math.round(visitors * 0.032 * 18000));
+      };
+    });
+  </script>
+</body>
+</html>
