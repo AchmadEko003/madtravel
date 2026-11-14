@@ -1,0 +1,66 @@
+<!-- ==========================================================================
+     Component: Alerts & Toasts (Pemberitahuan, Status Banner & Toast Notif)
+     Design System: Soft Neo-Brutalism & Tropical UI
+     Dependencies: assets/css/style.css, assets/js/app.js (showToast)
+     ========================================================================== -->
+
+<!-- 1. Top Promo Status Bar (Header Alert) -->
+<div class="top-promo-bar">
+  <div class="container top-promo-inner">
+    <div class="promo-ticker">
+      <span class="promo-pill">🔥 ALERT HARGA</span>
+      <span>Tiket Jakarta ke Tokyo turun drastis <strong>Rp 4.100.000</strong> di Trip.com!</span>
+    </div>
+    <div class="top-promo-utils">
+      <span style="color: var(--sunny); font-weight: 700;">⚡ Sisa 3 Kursi!</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Inline Card Alert Callouts -->
+<!-- Success / Lime Callout -->
+<div style="background: var(--bg-lime-tint); border: 2px solid var(--lime); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0;">
+  <div class="flex items-center gap-3">
+    <span style="font-size: 1.5rem;">🎉</span>
+    <div>
+      <div style="font-weight: 800; color: var(--lime-dark); font-size: 0.9rem;">Target Harga Tercapai!</div>
+      <div style="font-size: 0.82rem; color: var(--text-slate);">Tiket Bali turun di bawah target Rp 950.000 hari ini.</div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary btn-sm">Sikat Sekarang ➔</button>
+</div>
+
+<!-- Warning / Sunny Callout -->
+<div style="background: var(--bg-sunny-tint); border: 2px solid var(--sunny-dark); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+  <span style="font-size: 1.5rem;">⚠️</span>
+  <div>
+    <div style="font-weight: 800; color: var(--text-navy); font-size: 0.9rem;">Prediksi AI: Harga Akan Naik Besok</div>
+    <div style="font-size: 0.82rem; color: var(--text-slate);">Tren penerbangan akhir pekan menunjukkan kenaikan 18%. Waktu terbaik beli hari ini.</div>
+  </div>
+</div>
+
+<!-- Danger / Coral Error Fare Callout -->
+<div style="background: var(--bg-coral-tint); border: 2px solid var(--coral); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+  <span style="font-size: 1.5rem;">🚨</span>
+  <div>
+    <div style="font-weight: 800; color: var(--coral); font-size: 0.9rem;">Error Fare Terdeteksi!</div>
+    <div style="font-size: 0.82rem; color: var(--text-slate);">Salah pasang harga tiket Garuda rute Labuan Bajo. Cepat pesan sebelum dibatalkan sistem.</div>
+  </div>
+</div>
+
+<!-- 3. Floating Toast Notifications (Triggered via JavaScript) -->
+<!--
+  Fungsi JS: showToast(title, message, type)
+  Pilihan type: 'lime' | 'coral' | 'sunny' | 'turquoise'
+-->
+<button type="button" class="btn btn-primary btn-sm" onclick="showToast('Error Fare!', 'Harga anjlok 40% di rute favoritmu.', 'coral')">
+  Trigger Toast Coral
+</button>
+
+<button type="button" class="btn btn-turquoise btn-sm" onclick="showToast('Target Tercapai', 'Tiket telah mencapai harga impianmu!', 'lime')">
+  Trigger Toast Lime
+</button>
+
+<button type="button" class="btn btn-sunny btn-sm" onclick="showToast('Rute Ditukar', 'Origin dan destinasi berhasil dibalik.', 'sunny')">
+  Trigger Toast Sunny
+</button>

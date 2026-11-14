@@ -1,0 +1,50 @@
+<!-- ==========================================================================
+     Component: Modals & Dialogs (Kotak Dialog Interaktif & Konfirmasi)
+     Design System: Soft Neo-Brutalism & Tropical UI
+     Dependencies: assets/css/style.css, assets/js/app.js (openModal, closeModal)
+     ========================================================================== -->
+
+<!-- Trigger Button -->
+<button type="button" class="btn btn-primary" onclick="openModal('demo-modal')">
+  <span>Buka Modal Dialog ↗</span>
+</button>
+
+<!-- 1. Standard Modal Dialog Structure -->
+<div class="modal-backdrop" id="demo-modal" onclick="if(event.target===this) closeModal('demo-modal')">
+  <div class="modal-card" style="max-width: 540px;">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-start" style="margin-bottom: 16px;">
+      <div>
+        <span class="badge badge-pop badge-sunny" style="margin-bottom: 6px;">DIALOG KONFIRMASI</span>
+        <h3 class="title-h3">🔔 Pasang Target Harga Baru</h3>
+        <p style="font-size: 0.85rem; color: var(--text-slate); margin-top: 2px;">
+          Kami akan memantau rute ini 24/7 dan kirim notifikasi saat harga anjlok.
+        </p>
+      </div>
+      <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('demo-modal')" aria-label="Tutup Dialog">✕</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;">
+      <div class="search-field">
+        <div class="search-field-label">🛫 Rute Penerbangan</div>
+        <input type="text" class="search-field-input" value="Jakarta (CGK) ➔ Bali (DPS)" />
+      </div>
+
+      <div class="search-field">
+        <div class="search-field-label">🎯 Target Harga Maksimal</div>
+        <input type="text" class="search-field-input" value="Rp 850.000" />
+      </div>
+    </div>
+
+    <!-- Modal Footer Actions -->
+    <div class="flex items-center justify-end gap-3">
+      <button type="button" class="btn btn-outline" onclick="closeModal('demo-modal')">
+        <span>Batal</span>
+      </button>
+      <button type="button" class="btn btn-primary" onclick="closeModal('demo-modal'); showToast('Alert Disimpan!', 'Pantauan rute berhasil diaktifkan.', 'lime')">
+        <span>Simpan Target ➔</span>
+      </button>
+    </div>
+  </div>
+</div>

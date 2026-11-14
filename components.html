@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dokumentasi Komponen & Desain Sistem — MadTravel</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Documentation Layout & Component Showcase Styles */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 36px;
+      align-items: start;
+      padding: 36px 0 80px;
+    }
+
+    .docs-sidebar {
+      position: sticky;
+      top: 96px;
+      background: var(--bg-card);
+      border: 2.5px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+
+    .docs-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-slate);
+      transition: var(--transition-smooth);
+    }
+
+    .docs-nav-item:hover {
+      background: var(--bg-sand-alt);
+      color: var(--text-navy);
+      transform: translateX(3px);
+    }
+
+    .docs-nav-item.active {
+      background: var(--sunny);
+      color: var(--text-navy);
+      border: 2px solid var(--border-bold);
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    /* Showcase Section */
+    .showcase-section {
+      background: var(--bg-card);
+      border: 3px solid var(--border-bold);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pop);
+      padding: 32px;
+      margin-bottom: 36px;
+      scroll-margin-top: 100px;
+    }
+
+    .showcase-header {
+      border-bottom: 2px dashed var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .component-box {
+      background: var(--bg-sand);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .component-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .code-container {
+      position: relative;
+      background: #0F2942;
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #9FB6CD;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-body {
+      padding: 16px;
+      color: #A7F3D0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .copy-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: var(--sunny);
+      color: var(--text-navy);
+      font-size: 0.72rem;
+      font-weight: 800;
+      border: 1.5px solid var(--border-bold);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-btn:hover {
+      background: #FFC629;
+      transform: scale(1.05);
+    }
+
+    /* Color Swatch Card */
+    .color-swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .color-swatch {
+      border: 2px solid var(--border-bold);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow-pop-sm);
+    }
+
+    .color-preview {
+      height: 64px;
+      width: 100%;
+      border-bottom: 2px solid var(--border-bold);
+    }
+
+    .color-info {
+      padding: 8px 10px;
+    }
+
+    .color-name {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-navy);
+    }
+
+    .color-hex {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-slate);
+    }
+
+    @media (max-width: 980px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+      .docs-sidebar {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Promo Status Bar -->
+  <div class="top-promo-bar">
+    <div class="container top-promo-inner">
+      <div class="promo-ticker">
+        <span class="promo-pill">🎨 DESIGN SYSTEM</span>
+        <span>Dokumentasi Komponen Resmi <strong>MadTravel (Soft Neo-Brutalism & Tropical UI)</strong></span>
+      </div>
+      <div class="top-promo-utils">
+        <a href="index.html" style="color: var(--sunny); font-weight:700;">🌴 Kembali ke Beranda</a>
+        <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+          <option value="IDR">🇮🇩 IDR (Rp)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+          <option value="SGD">🇸🇬 SGD (S$)</option>
+          <option value="MYR">🇲🇾 MYR (RM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+        </div>
+        <span>MadTravel</span>
+        <span class="brand-tag">UI KIT</span>
+      </a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">🌴 Beranda</a>
+        <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+        <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+        <a href="price-alerts.html" class="nav-link">📈 Price Alert</a>
+        <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+        <a href="components.html" class="nav-link active">🧩 Komponen</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="coming-soon.html" class="btn btn-outline btn-sm">⏳ Coming Soon</a>
+        <a href="https://github.com/AchmadEko003/madtravel" target="_blank" class="btn btn-primary btn-sm">GitHub Repo ↗</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Buka Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="docs-layout">
+
+      <!-- Left Sidebar Navigation -->
+      <aside class="docs-sidebar">
+        <div style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; padding: 6px 12px; letter-spacing: 0.05em;">
+          Daftar Komponen
+        </div>
+        <a href="#section-tokens" class="docs-nav-item active">🎨 Design Tokens & Warna</a>
+        <a href="#section-typography" class="docs-nav-item">🔤 Tipografi & Font</a>
+        <a href="#section-buttons" class="docs-nav-item">🔘 Tombol (Buttons)</a>
+        <a href="#section-badges" class="docs-nav-item">🏷️ Badges & Stiker</a>
+        <a href="#section-cards" class="docs-nav-item">🗂️ Cards & Bento Box</a>
+        <a href="#section-modals" class="docs-nav-item">💬 Modals & Dialogs</a>
+        <a href="#section-alerts" class="docs-nav-item">🔔 Alerts & Toast Notif</a>
+        <a href="#section-inputs" class="docs-nav-item">📝 Form Inputs & Filter</a>
+        <a href="#section-layout" class="docs-nav-item">🧭 Navbar & Footer</a>
+      </aside>
+
+      <!-- Right Component Showcases -->
+      <div class="docs-content">
+
+        <!-- 1. Design Tokens & Colors -->
+        <section id="section-tokens" class="showcase-section">
+          <div class="showcase-header">
+            <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">PALET WARNA TROPIS</span>
+            <h2 class="title-h1">Design Tokens & Warna</h2>
+            <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+              Warna utama MadTravel memadukan nuansa pesisir tropis (Warm Sand, Lagoon Turquoise) dengan kontras tegas Ocean Navy dan aksen Hibiscus Coral.
+            </p>
+          </div>
+
+          <div class="color-swatch-grid">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #FFFDF8;"></div>
+              <div class="color-info">
+                <div class="color-name">Warm Sand</div>
+                <div class="color-hex">#FFFDF8</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #0F2942;"></div>
+              <div class="color-info">
+                <div class="color-name">Ocean Navy</div>
+                <div class="color-hex">#0F2942</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #FF5A36;"></div>
+              <div class="color-info">
+                <div class="color-name">Hibiscus Coral</div>
+                <div class="color-hex">#FF5A36</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #00B4A2;"></div>
+              <div class="color-info">
+                <div class="color-name">Lagoon Turquoise</div>
+                <div class="color-hex">#00B4A2</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #FFB800;"></div>
+              <div class="color-info">
+                <div class="color-name">Sunny Mango</div>
+                <div class="color-hex">#FFB800</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #10B981;"></div>
+              <div class="color-info">
+                <div class="color-name">Tropical Lime</div>
+                <div class="color-hex">#10B981</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #7C3AED;"></div>
+              <div class="color-info">
+                <div class="color-name">Purple Play</div>
+                <div class="color-hex">#7C3AED</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Typography -->
+        <section id="section-typography" class="showcase-section">
+          <div class="showcase-header">
+            <span class="badge badge-pop badge-coral" style="margin-bottom: 8px;">TIPOGRAFI</span>
+            <h2 class="title-h1">Tipografi Tiga Karakter</h2>
+            <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+              Kombinasi <code>Fredoka</code> untuk judul playful, <code>Plus Jakarta Sans</code> untuk isi, dan <code>JetBrains Mono</code> untuk angka harga tabular.
+            </p>
+          </div>
+
+          <div class="component-box">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <span class="badge badge-sunny" style="margin-bottom: 6px;">Fredoka (Display / Title)</span>
+                <div class="title-display">Satu Klik, Bandingkan <span class="highlight-coral">Semua OTA!</span></div>
+              </div>
+              <div>
+                <span class="badge badge-turquoise" style="margin-bottom: 6px;">Plus Jakarta Sans (UI & Body)</span>
+                <p style="color: var(--text-slate); font-size: 1rem;">
+                  Platform SaaS Travel Metasearch generasi baru. Bandingkan tiket pesawat, hotel, dan paket liburan dari 120+ OTA dalam satu layar yang cerah dan transparan.
+                </p>
+              </div>
+              <div>
+                <span class="badge badge-lime" style="margin-bottom: 6px;">JetBrains Mono (Data & Price)</span>
+                <div class="text-price" style="font-size: 1.6rem; color: var(--lime-dark);">Rp 1.185.000 (TERMURAH)</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Buttons -->
+        <section id="section-buttons" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">COMPONENTS / BUTTON.HTML</span>
+              <h2 class="title-h1">Tombol (Buttons & CTA)</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Tombol bergaya Soft Neo-Brutalism dengan hard shadow <code>4px 4px 0px #0F2942</code> dan efek hover tactile.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/button.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Varian Warna</div>
+            <div class="flex gap-3 flex-wrap items-center">
+              <button type="button" class="btn btn-primary" onclick="showToast('Primary Button', 'Aksi tombol Coral berhasil dipicu.', 'coral')">
+                <span>🔥 Primary Coral</span>
+              </button>
+              <button type="button" class="btn btn-turquoise" onclick="showToast('Turquoise Button', 'Aksi Lagoon Turquoise aktif.', 'turquoise')">
+                <span>🌴 Turquoise</span>
+              </button>
+              <button type="button" class="btn btn-sunny" onclick="showToast('Sunny Button', 'Aksi Sunny Mango aktif.', 'sunny')">
+                <span>⚡ Sunny Yellow</span>
+              </button>
+              <button type="button" class="btn btn-outline" onclick="showToast('Outline Button', 'Tombol outline ditekan.', 'lime')">
+                <span>🔍 Outline Pop</span>
+              </button>
+              <button type="button" class="btn btn-ghost">
+                <span>Ghost Button</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Ukuran & Tombol Aksi Khusus</div>
+            <div class="flex gap-3 flex-wrap items-center">
+              <button type="button" class="btn btn-primary btn-sm">Kecil (btn-sm)</button>
+              <button type="button" class="btn btn-primary">Standar</button>
+              <button type="button" class="btn btn-primary btn-lg">Besar (btn-lg)</button>
+              <button type="button" class="swap-route-btn" title="Tukar Rute" onclick="showToast('Rute Ditukar!', 'Origin dan destinasi berhasil dibalik.', 'sunny')">⇄</button>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/button.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-buttons', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-buttons">&lt;button type="button" class="btn btn-primary"&gt;
+  &lt;span&gt;🔥 Coba Pro Sekarang&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;button type="button" class="btn btn-turquoise"&gt;
+  &lt;span&gt;🌴 Lihat 18 Deal&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;button type="button" class="btn btn-sunny"&gt;
+  &lt;span&gt;⚡ Booking Langsung&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;button type="button" class="btn btn-outline"&gt;
+  &lt;span&gt;🔍 Bandingkan Tiket&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- Tombol Tukar Rute --&gt;
+&lt;button type="button" class="swap-route-btn" title="Tukar Rute"&gt;⇄&lt;/button&gt;</div>
+          </div>
+        </section>
+
+        <!-- 4. Badges & Tags -->
+        <section id="section-badges" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-coral" style="margin-bottom: 8px;">COMPONENTS / BADGE.HTML</span>
+              <h2 class="title-h1">Badges, Stiker & OTA Pills</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Label mikro berbentuk kapsul untuk status diskon, OTA terdaftar, dan penanda fitur Pro.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/badge.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Tactile Pop Badges & Highlights</div>
+            <div class="flex gap-2 flex-wrap items-center">
+              <span class="badge badge-pop badge-sunny">🏆 TERMURAH</span>
+              <span class="badge badge-pop badge-coral">🔥 TURUN 24%</span>
+              <span class="badge badge-pop badge-lime">✅ HARGA TERBAIK</span>
+              <span class="highlight-pill">⚡ Hemat Rp 360.000!</span>
+              <span class="promo-pill">FITUR BARU</span>
+              <span class="nav-badge">PRO</span>
+              <span class="brand-tag">METASEARCH+</span>
+            </div>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: OTA Brand Pills</div>
+            <div class="flex gap-2 flex-wrap items-center">
+              <span class="ota-badge ota-traveloka">Traveloka</span>
+              <span class="ota-badge ota-tiket">Tiket.com</span>
+              <span class="ota-badge ota-agoda">Agoda</span>
+              <span class="ota-badge ota-booking">Booking.com</span>
+              <span class="ota-badge ota-trip">Trip.com</span>
+              <span class="ota-badge ota-direct">Web Maskapai Resmi</span>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/badge.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-badges', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-badges">&lt;!-- Tactile Pop Badges --&gt;
+&lt;span class="badge badge-pop badge-sunny"&gt;🏆 TERMURAH&lt;/span&gt;
+&lt;span class="badge badge-pop badge-coral"&gt;🔥 TURUN 24%&lt;/span&gt;
+&lt;span class="badge badge-pop badge-lime"&gt;✅ HARGA TERBAIK&lt;/span&gt;
+
+&lt;!-- Dynamic Highlight Pill --&gt;
+&lt;span class="highlight-pill"&gt;⚡ Hemat Rp 360.000!&lt;/span&gt;
+
+&lt;!-- OTA Brand Pills --&gt;
+&lt;span class="ota-badge ota-traveloka"&gt;Traveloka&lt;/span&gt;
+&lt;span class="ota-badge ota-tiket"&gt;Tiket.com&lt;/span&gt;
+&lt;span class="ota-badge ota-agoda"&gt;Agoda&lt;/span&gt;
+&lt;span class="ota-badge ota-trip"&gt;Trip.com&lt;/span&gt;</div>
+          </div>
+        </section>
+
+        <!-- 5. Cards & Bento -->
+        <section id="section-cards" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">COMPONENTS / CARD.HTML</span>
+              <h2 class="title-h1">Cards & Bento Box</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Struktur kartu modular dengan border tegas 2-3px, sudut membulat, dan elevasi saat disentuh kursor.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/card.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Card Pop & Bento Card</div>
+            <div class="grid-2">
+              <div class="card-pop">
+                <span class="badge badge-pop badge-sunny" style="margin-bottom: 10px;">CARD-POP</span>
+                <h3 class="title-h2">Kartu Taktil Interaktif</h3>
+                <p style="color: var(--text-slate); font-size: 0.92rem; margin-top: 6px;">
+                  Menggunakan <code>box-shadow: var(--shadow-pop)</code> dan animasi lift saat kursor berada di atasnya.
+                </p>
+                <div style="margin-top: 16px;">
+                  <button type="button" class="btn btn-outline btn-sm">Aksi Kartu ➔</button>
+                </div>
+              </div>
+
+              <div class="bento-card" style="background: var(--bg-ocean-tint);">
+                <div>
+                  <span class="badge badge-pop badge-coral" style="margin-bottom: 10px;">BENTO GRID</span>
+                  <h3 class="title-h2">Deteksi Error Fare 24/7</h3>
+                  <p style="color: var(--text-slate); font-size: 0.9rem; margin-top: 6px;">
+                    Bot otomatis memindai perubahan harga dan mengirim alert instan WhatsApp.
+                  </p>
+                </div>
+                <div style="margin-top: 16px;">
+                  <button type="button" class="btn btn-primary btn-sm" style="width: 100%;">Coba Fitur ➔</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/card.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-cards', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-cards">&lt;div class="card-pop"&gt;
+  &lt;span class="badge badge-pop badge-sunny"&gt;CARD-POP&lt;/span&gt;
+  &lt;h3 class="title-h2"&gt;Kartu Taktil Interaktif&lt;/h3&gt;
+  &lt;p&gt;Menggunakan box-shadow: var(--shadow-pop).&lt;/p&gt;
+  &lt;button type="button" class="btn btn-outline btn-sm"&gt;Aksi Kartu ➔&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class="bento-card" style="background: var(--bg-ocean-tint);"&gt;
+  &lt;h3 class="title-h2"&gt;Bento Modular Container&lt;/h3&gt;
+  &lt;p&gt;Cocok untuk landing page dan dashboard SaaS.&lt;/p&gt;
+&lt;/div&gt;</div>
+          </div>
+        </section>
+
+        <!-- 6. Modals & Dialogs -->
+        <section id="section-modals" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-coral" style="margin-bottom: 8px;">COMPONENTS / MODAL.HTML</span>
+              <h2 class="title-h1">Modals & Dialogs</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Kotak dialog melayang dengan latar belakang blur transparan, animasi slide, dan kontrol interaktif.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/modal.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Trigger Dialog</div>
+            <div class="flex gap-3 items-center flex-wrap">
+              <button type="button" class="btn btn-primary" onclick="openModal('docs-demo-modal')">
+                <span>💬 Buka Modal Interaktif ↗</span>
+              </button>
+              <span style="font-size: 0.85rem; color: var(--text-slate);">
+                Klik tombol di atas untuk menguji backdrop blur dan aksi dialog.
+              </span>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/modal.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-modals', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-modals">&lt;!-- Tombol Trigger --&gt;
+&lt;button type="button" class="btn btn-primary" onclick="openModal('my-modal')"&gt;
+  Buka Modal
+&lt;/button&gt;
+
+&lt;!-- Modal Backdrop & Card --&gt;
+&lt;div class="modal-backdrop" id="my-modal" onclick="if(event.target===this) closeModal('my-modal')"&gt;
+  &lt;div class="modal-card" style="max-width: 540px;"&gt;
+    &lt;div class="flex justify-between items-center" style="margin-bottom: 16px;"&gt;
+      &lt;h3 class="title-h3"&gt;Judul Modal Dialog&lt;/h3&gt;
+      &lt;button class="btn btn-outline btn-sm" onclick="closeModal('my-modal')"&gt;✕&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;p&gt;Konten modal di sini...&lt;/p&gt;
+    &lt;div class="flex justify-end gap-2" style="margin-top: 20px;"&gt;
+      &lt;button class="btn btn-outline" onclick="closeModal('my-modal')"&gt;Batal&lt;/button&gt;
+      &lt;button class="btn btn-primary"&gt;Konfirmasi ➔&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+          </div>
+        </section>
+
+        <!-- 7. Alerts & Toast Notifications -->
+        <section id="section-alerts" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">COMPONENTS / ALERT.HTML</span>
+              <h2 class="title-h1">Alerts & Toast Notifications</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Notifikasi pop-up dinamis dan banner status untuk peringatan harga, kupon diskon, dan sinyal AI.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/alert.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Inline Callout Banners</div>
+
+            <!-- Success -->
+            <div style="background: var(--bg-lime-tint); border: 2px solid var(--lime); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
+              <div class="flex items-center gap-3">
+                <span style="font-size: 1.5rem;">🎉</span>
+                <div>
+                  <div style="font-weight: 800; color: var(--lime-dark); font-size: 0.9rem;">Target Harga Tercapai!</div>
+                  <div style="font-size: 0.82rem; color: var(--text-slate);">Tiket Jakarta ke Bali turun di bawah target Rp 950.000 hari ini.</div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm">Sikat Sekarang ➔</button>
+            </div>
+
+            <!-- Warning -->
+            <div style="background: var(--bg-sunny-tint); border: 2px solid var(--sunny-dark); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <span style="font-size: 1.5rem;">⚠️</span>
+              <div>
+                <div style="font-weight: 800; color: var(--text-navy); font-size: 0.9rem;">Prediksi AI: Beli Sekarang</div>
+                <div style="font-size: 0.82rem; color: var(--text-slate);">Harga tiket ke Tokyo diperkirakan naik 18% besok pagi.</div>
+              </div>
+            </div>
+
+            <!-- Danger -->
+            <div style="background: var(--bg-coral-tint); border: 2px solid var(--coral); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.5rem;">🚨</span>
+              <div>
+                <div style="font-weight: 800; color: var(--coral); font-size: 0.9rem;">Error Fare Terdeteksi!</div>
+                <div style="font-size: 0.82rem; color: var(--text-slate);">Salah tarif tiket maskapai rute Labuan Bajo. Tersisa 2 kursi!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Pemicu Toast Melayang (app.js: showToast)</div>
+            <div class="flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-primary btn-sm" onclick="showToast('Error Fare!', 'Tiket Tokyo anjlok ke Rp 4,1 Juta.', 'coral')">
+                🔥 Test Toast Coral
+              </button>
+              <button type="button" class="btn btn-turquoise btn-sm" onclick="showToast('Target Tercapai', 'Notifikasi penurunan harga berhasil!', 'lime')">
+                ✅ Test Toast Lime
+              </button>
+              <button type="button" class="btn btn-sunny btn-sm" onclick="showToast('Rute Ditukar', 'Origin dan destinasi telah dibalik.', 'sunny')">
+                ⚡ Test Toast Sunny
+              </button>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>JavaScript Trigger — assets/js/app.js</span>
+              <button class="copy-btn" onclick="copySnippet('code-alerts', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-alerts">// Panggil di mana saja dalam aplikasi:
+showToast('Target Tercapai!', 'Tiket Bali turun di bawah Rp 950.000.', 'lime');
+showToast('Error Fare!', 'Harga anjlok 40% di Trip.com!', 'coral');
+showToast('Mata Uang Diubah', 'Harga kini tampil dalam USD.', 'turquoise');</div>
+          </div>
+        </section>
+
+        <!-- 8. Form Inputs & Filters -->
+        <section id="section-inputs" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-coral" style="margin-bottom: 8px;">COMPONENTS / FORM-INPUT.HTML</span>
+              <h2 class="title-h1">Form Inputs & Controls</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Koleksi lengkap input form bergaya Soft Neo-Brutalism: Text Field, Input Group, Textarea, Custom Select, Date Picker, Radio, Checkbox, dan Validation States.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/form-input.html</span>
+          </div>
+
+          <!-- Preview 1: Text Fields & Input Groups -->
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Text Inputs & Addons</div>
+            <div class="grid-2" style="gap: 16px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="demo-input-name">Nama Lengkap <span class="req">*</span></label>
+                <input type="text" id="demo-input-name" class="form-control" placeholder="Contoh: Achmad Eko" />
+                <span class="form-hint">Sesuai nama yang tertera pada KTP / Paspor.</span>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Input dengan Prefix Mata Uang</label>
+                <div class="input-group">
+                  <span class="input-addon addon-left">Rp</span>
+                  <input type="text" class="form-control" placeholder="850.000" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px; margin-bottom: 0;">
+              <label class="form-label">Input Pencarian dengan Tombol Aksi</label>
+              <div class="input-group">
+                <span class="input-addon addon-left">🔍</span>
+                <input type="text" class="form-control" placeholder="Cari rute, hotel, atau kota..." />
+                <button type="button" class="btn btn-primary" style="border-radius: 0 var(--radius-md) var(--radius-md) 0; box-shadow: 2px 2px 0px var(--border-bold);" onclick="showToast('Mencari...', 'Memindai 120+ OTA secara real-time!', 'turquoise')">
+                  Cari Tiket
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 2: Dropdown & Searchable Select (Combobox) -->
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Standard Select & Searchable Select (Combobox)</div>
+            <div class="grid-2" style="gap: 16px;">
+              <!-- Standard Dropdown -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Kelas Penerbangan (Standard Select)</label>
+                <div class="custom-dropdown" id="demo-cabin-dropdown">
+                  <input type="hidden" name="cabin_class" value="economy" />
+                  <button type="button" class="custom-dropdown-btn">
+                    <span class="custom-dropdown-label">Ekonomi (Paling Hemat)</span>
+                    <span class="custom-dropdown-arrow">▼</span>
+                  </button>
+                  <div class="custom-dropdown-menu">
+                    <div class="custom-dropdown-item selected" data-value="economy">
+                      <span class="item-text">Ekonomi (Paling Hemat)</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="premium">
+                      <span class="item-text">Premium Ekonomi</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="business">
+                      <span class="item-text">Bisnis (Lounge & Full-Flat)</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="first">
+                      <span class="item-text">First Class</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Searchable Select -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Kota / Bandara Tujuan (Searchable Select 🔍)</label>
+                <div class="custom-dropdown" id="demo-dest-dropdown">
+                  <input type="hidden" name="destination_code" value="DPS" />
+                  <button type="button" class="custom-dropdown-btn">
+                    <span class="custom-dropdown-label">🏝️ Bali (DPS) - Ngurah Rai Intl</span>
+                    <span class="custom-dropdown-arrow">▼</span>
+                  </button>
+                  <div class="custom-dropdown-menu">
+                    <!-- Live Search Input -->
+                    <div class="dropdown-search-wrapper">
+                      <input type="text" class="dropdown-search-input" placeholder="🔍 Cari kota atau bandara..." autocomplete="off" />
+                    </div>
+                    <div class="custom-dropdown-item selected" data-value="DPS">
+                      <span class="item-text">🏝️ Bali (DPS) - Ngurah Rai Intl</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="CGK">
+                      <span class="item-text">🏙️ Jakarta (CGK) - Soekarno-Hatta</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="LBJ">
+                      <span class="item-text">⛵ Labuan Bajo (LBJ) - Komodo</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="SIN">
+                      <span class="item-text">🦁 Singapura (SIN) - Changi Airport</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="NRT">
+                      <span class="item-text">🗼 Tokyo (NRT) - Narita Intl</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="BKK">
+                      <span class="item-text">🛕 Bangkok (BKK) - Suvarnabhumi</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="custom-dropdown-item" data-value="ICN">
+                      <span class="item-text">🌸 Seoul (ICN) - Incheon Intl</span>
+                      <span class="item-check">✔</span>
+                    </div>
+                    <div class="dropdown-empty-state">
+                      Kota atau bandara tidak ditemukan.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Custom Datepicker (Single & Range) -->
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Custom Datepicker (Single & Range)</div>
+            <div class="grid-2" style="gap: 16px;">
+              <!-- Custom Single Datepicker -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">📅 Tanggal Berangkat (Single Datepicker)</label>
+                <div class="custom-datepicker" id="demo-datepicker-single" data-mode="single" data-year="2026" data-month="11" data-start="2026-12-18">
+                  <input type="hidden" data-role="start-date" value="2026-12-18" />
+                  <button type="button" class="datepicker-trigger-btn">
+                    <span class="datepicker-label">📅 18 Des 2026</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Ubah ▾</span>
+                  </button>
+                  <div class="datepicker-pop">
+                    <div class="datepicker-header">
+                      <button type="button" class="datepicker-nav-btn datepicker-prev" title="Bulan Sebelumnya">❮</button>
+                      <div class="datepicker-title">Desember 2026</div>
+                      <button type="button" class="datepicker-nav-btn datepicker-next" title="Bulan Berikutnya">❯</button>
+                    </div>
+                    <div class="datepicker-weekdays">
+                      <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+                    </div>
+                    <div class="datepicker-days-grid">
+                      <!-- Rendered by JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Custom Date Range Picker -->
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">📅 Rentang Liburan (Date Range Picker)</label>
+                <div class="custom-datepicker" id="demo-datepicker-range" data-mode="range" data-year="2026" data-month="11" data-start="2026-12-18" data-end="2026-12-23">
+                  <input type="hidden" data-role="start-date" value="2026-12-18" />
+                  <input type="hidden" data-role="end-date" value="2026-12-23" />
+                  <button type="button" class="datepicker-trigger-btn">
+                    <span class="datepicker-label">📅 18 Des – 23 Des 2026</span>
+                    <span class="badge badge-coral" style="font-size: 0.65rem; padding: 2px 6px;">5 Malam</span>
+                  </button>
+                  <div class="datepicker-pop">
+                    <div class="datepicker-presets">
+                      <button type="button" class="preset-chip" data-days="2">3 Hari</button>
+                      <button type="button" class="preset-chip" data-days="5">5 Hari</button>
+                      <button type="button" class="preset-chip" data-days="7">1 Minggu</button>
+                    </div>
+                    <div class="datepicker-header">
+                      <button type="button" class="datepicker-nav-btn datepicker-prev" title="Bulan Sebelumnya">❮</button>
+                      <div class="datepicker-title">Desember 2026</div>
+                      <button type="button" class="datepicker-nav-btn datepicker-next" title="Bulan Berikutnya">❯</button>
+                    </div>
+                    <div class="datepicker-weekdays">
+                      <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+                    </div>
+                    <div class="datepicker-days-grid">
+                      <!-- Rendered by JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview 3: Textarea & Validation States -->
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Textarea & Status Validasi</div>
+            <div class="grid-2" style="gap: 16px; margin-bottom: 14px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Input Error / Invalid</label>
+                <input type="email" class="form-control is-invalid" value="achmad@" />
+                <span class="form-error-text">⚠️ Format email tidak valid. Harap periksa kembali.</span>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Input Sukses / Valid</label>
+                <input type="text" class="form-control is-valid" value="KUPONTROPIS2026" />
+                <span class="form-hint" style="color: var(--lime-dark); font-weight: 700;">✅ Kupon diskon Rp 150.000 berhasil diterapkan!</span>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Permintaan Khusus Hotel / Catatan (Textarea)</label>
+              <textarea class="form-textarea" placeholder="Contoh: Kamar bebas asap rokok, lantai atas, check-in awal pukul 13.00 WIB..."></textarea>
+            </div>
+          </div>
+
+          <!-- Preview 4: Radio Buttons, Checkboxes & Filter Pills -->
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Radio, Checkbox & OTA Filter Pills</div>
+            <div class="form-group">
+              <label class="form-label">Pilihan Tunggal (Radio Buttons)</label>
+              <div class="flex gap-4 flex-wrap" style="margin-top: 4px;">
+                <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+                  <input type="radio" name="demo-radio" value="roundtrip" checked />
+                  <span>Pulang - Pergi (PP)</span>
+                </label>
+                <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+                  <input type="radio" name="demo-radio" value="oneway" />
+                  <span>Sekali Jalan</span>
+                </label>
+                <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+                  <input type="radio" name="demo-radio" value="multicity" />
+                  <span>Multi-Kota</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">Checkbox Neo-Brutalist & OTA Filter Pills</label>
+              <div class="flex gap-3 flex-wrap items-center" style="margin: 6px 0 12px;">
+                <label class="flex items-center gap-2" style="font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                  <input type="checkbox" checked />
+                  <span>Turquoise</span>
+                </label>
+                <label class="flex items-center gap-2" style="font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                  <input type="checkbox" class="check-coral" checked />
+                  <span>Coral</span>
+                </label>
+                <label class="flex items-center gap-2" style="font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                  <input type="checkbox" class="check-lime" checked />
+                  <span>Lime</span>
+                </label>
+                <label class="flex items-center gap-2" style="font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+                  <input type="checkbox" class="check-sunny" checked />
+                  <span>Sunny</span>
+                </label>
+              </div>
+
+              <div class="flex gap-2 flex-wrap items-center">
+                <label class="ota-check-pill">
+                  <input type="checkbox" checked />
+                  <span>Traveloka</span>
+                </label>
+                <label class="ota-check-pill">
+                  <input type="checkbox" checked />
+                  <span>Tiket.com</span>
+                </label>
+                <label class="ota-check-pill">
+                  <input type="checkbox" checked />
+                  <span>Agoda</span>
+                </label>
+                <label class="ota-check-pill">
+                  <input type="checkbox" checked class="check-lime" />
+                  <span>⚡ Termasuk Bagasi & Pajak</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/form-input.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-inputs', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-inputs">&lt;!-- 1. Text Field Standar --&gt;
+&lt;div class="form-group"&gt;
+  &lt;label class="form-label"&gt;Nama Lengkap &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;
+  &lt;input type="text" class="form-control" placeholder="Contoh: Achmad Eko" /&gt;
+  &lt;span class="form-hint"&gt;Sesuai KTP/Paspor.&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- 2. Input Group (Addon Prefix) --&gt;
+&lt;div class="input-group"&gt;
+  &lt;span class="input-addon addon-left"&gt;Rp&lt;/span&gt;
+  &lt;input type="text" class="form-control" placeholder="850.000" /&gt;
+&lt;/div&gt;
+
+&lt;!-- 3. Neo-Brutalist Custom Floating Dropdown (Standard) --&gt;
+&lt;div class="custom-dropdown"&gt;
+  &lt;input type="hidden" name="cabin_class" value="economy" /&gt;
+  &lt;button type="button" class="custom-dropdown-btn"&gt;
+    &lt;span class="custom-dropdown-label"&gt;Ekonomi (Paling Hemat)&lt;/span&gt;
+    &lt;span class="custom-dropdown-arrow"&gt;▼&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="custom-dropdown-menu"&gt;
+    &lt;div class="custom-dropdown-item selected" data-value="economy"&gt;
+      &lt;span class="item-text"&gt;Ekonomi (Paling Hemat)&lt;/span&gt;
+      &lt;span class="item-check"&gt;✔&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="custom-dropdown-item" data-value="premium"&gt;
+      &lt;span class="item-text"&gt;Premium Ekonomi&lt;/span&gt;
+      &lt;span class="item-check"&gt;✔&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 3b. Searchable Select (Combobox dengan Input Cari) --&gt;
+&lt;div class="custom-dropdown"&gt;
+  &lt;input type="hidden" name="destination" value="DPS" /&gt;
+  &lt;button type="button" class="custom-dropdown-btn"&gt;
+    &lt;span class="custom-dropdown-label"&gt;Bali (DPS)&lt;/span&gt;
+    &lt;span class="custom-dropdown-arrow"&gt;▼&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="custom-dropdown-menu"&gt;
+    &lt;div class="dropdown-search-wrapper"&gt;
+      &lt;input type="text" class="dropdown-search-input" placeholder="🔍 Cari kota..." /&gt;
+    &lt;/div&gt;
+    &lt;div class="custom-dropdown-item selected" data-value="DPS"&gt;
+      &lt;span class="item-text"&gt;Bali (DPS)&lt;/span&gt;
+      &lt;span class="item-check"&gt;✔&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="custom-dropdown-item" data-value="CGK"&gt;
+      &lt;span class="item-text"&gt;Jakarta (CGK)&lt;/span&gt;
+      &lt;span class="item-check"&gt;✔&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="dropdown-empty-state"&gt;Tidak ditemukan.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 4. Neo-Brutalist Date Range Picker --&gt;
+&lt;div class="custom-datepicker" data-mode="range"&gt;
+  &lt;input type="hidden" data-role="start-date" value="2026-12-18" /&gt;
+  &lt;input type="hidden" data-role="end-date" value="2026-12-23" /&gt;
+  &lt;button type="button" class="datepicker-trigger-btn"&gt;
+    &lt;span class="datepicker-label"&gt;📅 18 Des – 23 Des 2026&lt;/span&gt;
+    &lt;span class="badge badge-coral"&gt;5 Malam&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="datepicker-pop"&gt;
+    &lt;!-- Kalender pop-up floating neo-brutalism dirender otomatis oleh JS --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 5. Textarea --&gt;
+&lt;textarea class="form-textarea" placeholder="Permintaan khusus hotel..."&gt;&lt;/textarea&gt;
+
+&lt;!-- 6. Radio Button --&gt;
+&lt;label class="flex items-center gap-2"&gt;
+  &lt;input type="radio" name="trip" checked /&gt; Pulang - Pergi
+&lt;/label&gt;
+
+&lt;!-- 7. Neo-Brutalist Checkbox & OTA Pill --&gt;
+&lt;label class="ota-check-pill"&gt;
+  &lt;input type="checkbox" checked /&gt; Traveloka
+&lt;/label&gt;</div>
+          </div>
+        </section>
+
+        <!-- 9. Navbar & Footer -->
+        <section id="section-layout" class="showcase-section">
+          <div class="showcase-header flex justify-between items-center flex-wrap gap-3">
+            <div>
+              <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">COMPONENTS / NAVBAR-FOOTER.HTML</span>
+              <h2 class="title-h1">Navbar & Footer</h2>
+              <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 4px;">
+                Struktur navigasi sticky dengan logo brand, tautan halaman, status promo bar, dan footer 4 kolom.
+              </p>
+            </div>
+            <span class="badge badge-lime">File: components/navbar-footer.html</span>
+          </div>
+
+          <div class="component-box">
+            <div class="component-box-header">Live Preview: Brand Logo & Icon</div>
+            <div class="flex gap-4 items-center flex-wrap">
+              <a href="index.html" class="brand-logo">
+                <div class="brand-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+                  </svg>
+                </div>
+                <span>MadTravel</span>
+                <span class="brand-tag">METASEARCH+</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>HTML Snippet — components/navbar-footer.html</span>
+              <button class="copy-btn" onclick="copySnippet('code-layout', this)">📋 Salin Kode</button>
+            </div>
+            <div class="code-body" id="code-layout">&lt;!-- Brand Logo --&gt;
+&lt;a href="index.html" class="brand-logo"&gt;
+  &lt;div class="brand-icon"&gt;✈️&lt;/div&gt;
+  &lt;span&gt;MadTravel&lt;/span&gt;
+  &lt;span class="brand-tag"&gt;METASEARCH+&lt;/span&gt;
+&lt;/a&gt;</div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Interactive Modal Demo (for Section 6) -->
+  <div class="modal-backdrop" id="docs-demo-modal" onclick="if(event.target===this) closeModal('docs-demo-modal')">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="flex justify-between items-start" style="margin-bottom: 16px;">
+        <div>
+          <span class="badge badge-pop badge-sunny" style="margin-bottom: 6px;">DEMO DIALOG MODAL</span>
+          <h3 class="title-h3">🔔 Modal Interaktif Berfungsi!</h3>
+          <p style="font-size: 0.85rem; color: var(--text-slate); margin-top: 2px;">
+            Komponen modal menggunakan backdrop blur dan box shadow tactile.
+          </p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('docs-demo-modal')">✕</button>
+      </div>
+
+      <div style="background: var(--bg-sand); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px;">
+        <div style="font-weight: 800; font-size: 0.9rem;">✨ Status Komponen:</div>
+        <div style="font-size: 0.85rem; color: var(--text-slate); margin-top: 4px;">
+          Modal ini dipicu dengan fungsi <code>openModal('docs-demo-modal')</code> dan ditutup dengan <code>closeModal()</code> atau klik di area luar dialog.
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button type="button" class="btn btn-outline" onclick="closeModal('docs-demo-modal')">Tutup</button>
+        <button type="button" class="btn btn-primary" onclick="closeModal('docs-demo-modal'); showToast('Aksi Berhasil!', 'Perubahan telah disimpan.', 'lime')">
+          Simpan ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <div>© 2026 MadTravel Design System • Soft Neo-Brutalism & Tropical UI Kit.</div>
+      <div class="flex gap-4">
+        <a href="index.html">Beranda</a>
+        <a href="flights.html">Pesawat</a>
+        <a href="hotels.html">Hotel</a>
+        <a href="price-alerts.html">Price Alert</a>
+        <a href="coming-soon.html">Coming Soon</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    // Copy code snippet to clipboard with toast feedback
+    function copySnippet(elementId, btnElement) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const oldText = btnElement.textContent;
+          btnElement.textContent = '✅ Disalin!';
+          setTimeout(() => btnElement.textContent = oldText, 2000);
+          showToast('Kode HTML Disalin! 📋', 'Snippet komponen siap ditempel di halamanmu.', 'lime');
+        }).catch(() => {
+          showToast('Gagal Menyalin', 'Silakan blok dan salin secara manual.', 'coral');
+        });
+      }
+    }
+
+    // Active sidebar link tracking on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.showcase-section');
+      const navItems = document.querySelectorAll('.docs-nav-item');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 120;
+          if (window.scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === `#${current}`) {
+            item.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

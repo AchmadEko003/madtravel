@@ -71,6 +71,10 @@ Berbeda dengan *Neo-Brutalism* kaku yang menggunakan sudut tajam dan warna hitam
 7. **🚀 Coming Soon (`coming-soon.html`)**
    - Halaman *standalone* minimalis tanpa *header/footer* dengan kartu **Soft Neo-Brutalism** di tengah layar.
 
+8. **🧩 UI Kit & Dokumentasi Komponen (`components.html` & `components/`)**
+   - Halaman dokumentasi interaktif (*living styleguide*) lengkap dengan *live preview* dan tombol salin kode untuk seluruh komponen (Buttons, Badges, Cards, Modals, Alerts, Form Controls, Navbar, dan Footer).
+   - Seluruh modul komponen terpisah dan siap pakai di direktori `components/`.
+
 ---
 
 ## 📂 Struktur Direktori
@@ -84,7 +88,16 @@ madtravel/
 ├── ai-planner.html         # AI Smart Trip Planner & Budget Breakdown
 ├── pricing.html            # SaaS Subscription Tiers & B2B White-Label Studio
 ├── coming-soon.html        # Minimalist Coming Soon Page
+├── components.html         # Living Styleguide & Dokumentasi Komponen UI
 ├── README.md               # Dokumentasi Proyek & Panduan Design System
+├── components/             # Kumpulan Modul Komponen Reusable Terpisah
+│   ├── button.html         # Varian Tombol & Call-To-Action
+│   ├── badge.html          # Label Stiker, Pill & OTA Badges
+│   ├── card.html           # Card Pop, Bento Box & Destinasi
+│   ├── modal.html          # Kotak Dialog Interaktif & Backdrop
+│   ├── alert.html          # Alert Banner, Callout & Toast Notifikasi
+│   ├── form-input.html     # Field Pencarian, Select & Checkbox Pill
+│   └── navbar-footer.html  # Header Navigasi & Footer Lengkap
 └── assets/
     ├── css/
     │   └── style.css       # Global Design System (Soft Neo-Brutalism & Tropical UI)

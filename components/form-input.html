@@ -1,0 +1,348 @@
+<!-- ==========================================================================
+     Component: Form Inputs & Controls (Koleksi Lengkap Input Form)
+     Design System: Soft Neo-Brutalism & Tropical UI
+     Dependencies: assets/css/style.css, assets/js/app.js
+     ========================================================================== -->
+
+<!-- ==========================================================================
+     1. Text Fields (Input Teks Standar & Status)
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label" for="input-name">
+    <span>Nama Lengkap <span class="req">*</span></span>
+  </label>
+  <input type="text" id="input-name" class="form-control" placeholder="Contoh: Achmad Eko" required />
+  <span class="form-hint">Sesuai nama yang tertera pada KTP / Paspor.</span>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="input-email">
+    <span>Alamat Email</span>
+  </label>
+  <input type="email" id="input-email" class="form-control" placeholder="nama@email.com" />
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="input-disabled">
+    <span>Input Disabled (Terkunci)</span>
+  </label>
+  <input type="text" id="input-disabled" class="form-control" value="Kupon DISKON40 (Telah Dipakai)" disabled />
+</div>
+
+<!-- ==========================================================================
+     2. Input Groups (Prefix Icon, Addon & Tombol)
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label">Input dengan Prefix Icon / Mata Uang</label>
+  <div class="input-group">
+    <span class="input-addon addon-left">Rp</span>
+    <input type="text" class="form-control" placeholder="850.000" />
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">Input Pencarian dengan Tombol Aksi</label>
+  <div class="input-group">
+    <span class="input-addon addon-left">🔍</span>
+    <input type="text" class="form-control" placeholder="Cari rute, hotel, atau kota..." />
+    <button type="button" class="btn btn-primary" style="border-radius: 0 var(--radius-md) var(--radius-md) 0; box-shadow: 2px 2px 0px var(--border-bold);">
+      Cari
+    </button>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     3. Validation States (Error / Invalid & Success / Valid)
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label" for="input-err">
+    <span>Input Error / Invalid</span>
+  </label>
+  <input type="email" id="input-err" class="form-control is-invalid" value="achmad@" />
+  <span class="form-error-text">⚠️ Format email tidak valid. Harap periksa kembali.</span>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="input-success">
+    <span>Input Sukses / Valid</span>
+  </label>
+  <input type="text" id="input-success" class="form-control is-valid" value="KUPONTROPIS2026" />
+  <span class="form-hint" style="color: var(--lime-dark); font-weight: 700;">✅ Kupon diskon Rp 150.000 berhasil diterapkan!</span>
+</div>
+
+<!-- ==========================================================================
+     4. Textarea (Area Teks Multi-Line)
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label" for="input-notes">
+    <span>Catatan Khusus / Permintaan Khusus Hotel</span>
+  </label>
+  <textarea id="input-notes" class="form-textarea" placeholder="Contoh: Kamar bebas asap rokok, lantai atas, check-in lebih awal pukul 13.00 WIB..."></textarea>
+  <span class="form-hint">Maksimal 500 karakter.</span>
+</div>
+
+<!-- ==========================================================================
+     5. Dropdown & Select Menus (Standard & Searchable Combobox)
+     ========================================================================== -->
+<div class="grid-2" style="gap: 16px;">
+  <!-- Standard Neo-Brutalist Floating Select -->
+  <div class="form-group">
+    <label class="form-label">
+      <span>Kelas Penerbangan (Standard Select)</span>
+    </label>
+    <div class="custom-dropdown" id="dropdown-cabin">
+      <input type="hidden" name="cabin_class" value="economy" />
+      <button type="button" class="custom-dropdown-btn">
+        <span class="custom-dropdown-label">Ekonomi (Paling Hemat)</span>
+        <span class="custom-dropdown-arrow">▼</span>
+      </button>
+      <div class="custom-dropdown-menu">
+        <div class="custom-dropdown-item selected" data-value="economy">
+          <span class="item-text">Ekonomi (Paling Hemat)</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="premium">
+          <span class="item-text">Premium Ekonomi</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="business">
+          <span class="item-text">Bisnis (Lounge & Full-Flat)</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="first">
+          <span class="item-text">First Class</span>
+          <span class="item-check">✔</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Searchable Floating Select (Dengan Live Search Filter) -->
+  <div class="form-group">
+    <label class="form-label">
+      <span>Bandara / Kota Tujuan (Searchable Select)</span>
+    </label>
+    <div class="custom-dropdown" id="dropdown-searchable-destination">
+      <input type="hidden" name="destination_code" value="DPS" />
+      <button type="button" class="custom-dropdown-btn">
+        <span class="custom-dropdown-label">🏝️ Bali (DPS) - Ngurah Rai Intl</span>
+        <span class="custom-dropdown-arrow">▼</span>
+      </button>
+
+      <div class="custom-dropdown-menu">
+        <!-- Live Search Input Box -->
+        <div class="dropdown-search-wrapper">
+          <input type="text" class="dropdown-search-input" placeholder="🔍 Ketik nama kota atau kode bandara..." autocomplete="off" />
+        </div>
+
+        <!-- Options List -->
+        <div class="custom-dropdown-item selected" data-value="DPS">
+          <span class="item-text">🏝️ Bali (DPS) - Ngurah Rai Intl</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="CGK">
+          <span class="item-text">🏙️ Jakarta (CGK) - Soekarno-Hatta</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="LBJ">
+          <span class="item-text">⛵ Labuan Bajo (LBJ) - Komodo</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="SIN">
+          <span class="item-text">🦁 Singapura (SIN) - Changi Airport</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="NRT">
+          <span class="item-text">🗼 Tokyo (NRT) - Narita Intl</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="BKK">
+          <span class="item-text">🛕 Bangkok (BKK) - Suvarnabhumi</span>
+          <span class="item-check">✔</span>
+        </div>
+        <div class="custom-dropdown-item" data-value="ICN">
+          <span class="item-text">🌸 Seoul (ICN) - Incheon Intl</span>
+          <span class="item-check">✔</span>
+        </div>
+
+        <!-- Empty Search State -->
+        <div class="dropdown-empty-state">
+          Kota atau bandara tidak ditemukan. Coba kata kunci lain.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     6. Custom Neo-Brutalist Datepicker (Single & Range)
+     ========================================================================== -->
+<div class="grid-2" style="gap: 16px;">
+  <!-- Single Date Picker -->
+  <div class="form-group">
+    <label class="form-label">
+      <span>📅 Tanggal Keberangkatan (Single Datepicker)</span>
+    </label>
+    <div class="custom-datepicker" id="datepicker-single" data-mode="single" data-year="2026" data-month="11" data-start="2026-12-18">
+      <input type="hidden" data-role="start-date" value="2026-12-18" />
+      <button type="button" class="datepicker-trigger-btn">
+        <span class="datepicker-label">📅 18 Des 2026</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Ubah ▾</span>
+      </button>
+
+      <div class="datepicker-pop">
+        <div class="datepicker-header">
+          <button type="button" class="datepicker-nav-btn datepicker-prev" title="Bulan Sebelumnya">❮</button>
+          <div class="datepicker-title">Desember 2026</div>
+          <button type="button" class="datepicker-nav-btn datepicker-next" title="Bulan Berikutnya">❯</button>
+        </div>
+        <div class="datepicker-weekdays">
+          <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+        </div>
+        <div class="datepicker-days-grid">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Range Picker -->
+  <div class="form-group">
+    <label class="form-label">
+      <span>📅 Rentang Tanggal Liburan (Date Range Picker)</span>
+    </label>
+    <div class="custom-datepicker" id="datepicker-range" data-mode="range" data-year="2026" data-month="11" data-start="2026-12-18" data-end="2026-12-23">
+      <input type="hidden" data-role="start-date" value="2026-12-18" />
+      <input type="hidden" data-role="end-date" value="2026-12-23" />
+      <button type="button" class="datepicker-trigger-btn">
+        <span class="datepicker-label">📅 18 Des – 23 Des 2026</span>
+        <span class="badge badge-coral" style="font-size: 0.68rem; padding: 2px 7px;">5 Malam</span>
+      </button>
+
+      <div class="datepicker-pop">
+        <div class="datepicker-presets">
+          <span style="font-size: 0.72rem; font-weight: 800; color: var(--text-slate); width: 100%; margin-bottom: 2px;">⚡ PILIHAN CEPAT:</span>
+          <button type="button" class="preset-chip" data-days="2">Akhir Pekan (3H2M)</button>
+          <button type="button" class="preset-chip" data-days="5">5 Hari</button>
+          <button type="button" class="preset-chip" data-days="7">1 Minggu</button>
+        </div>
+
+        <div class="datepicker-header">
+          <button type="button" class="datepicker-nav-btn datepicker-prev" title="Bulan Sebelumnya">❮</button>
+          <div class="datepicker-title">Desember 2026</div>
+          <button type="button" class="datepicker-nav-btn datepicker-next" title="Bulan Berikutnya">❯</button>
+        </div>
+        <div class="datepicker-weekdays">
+          <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+        </div>
+        <div class="datepicker-days-grid">
+          <!-- Rendered dynamically by JS -->
+        </div>
+        <div class="datepicker-footer">
+          <span style="color: var(--text-slate);">Klik 2x untuk pilih rentang</span>
+          <span style="color: var(--coral); font-weight: 800;">✨ Promo Aktif</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     7. Radio Buttons (Pilihan Tunggal Neo-Brutalist)
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label">Tipe Perjalanan</label>
+  <div class="flex gap-4 flex-wrap" style="margin-top: 4px;">
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="radio" name="trip-type" value="roundtrip" checked />
+      <span>Pulang - Pergi (PP)</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="radio" name="trip-type" value="oneway" />
+      <span>Sekali Jalan</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="radio" name="trip-type" value="multicity" />
+      <span>Multi-Kota</span>
+    </label>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     8. Custom Neo-Brutalist Checkboxes & OTA Filter Pills
+     ========================================================================== -->
+<div class="form-group">
+  <label class="form-label">Varian Checkbox</label>
+  <div class="flex gap-4 flex-wrap items-center" style="margin-top: 4px;">
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="checkbox" checked />
+      <span>Turquoise (Default)</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="checkbox" class="check-coral" checked />
+      <span>Coral</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="checkbox" class="check-lime" checked />
+      <span>Lime</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="checkbox" class="check-sunny" checked />
+      <span>Sunny</span>
+    </label>
+    <label class="flex items-center gap-2" style="font-weight: 700; cursor: pointer;">
+      <input type="checkbox" />
+      <span>Unchecked</span>
+    </label>
+  </div>
+</div>
+
+<!-- OTA Filter Pills -->
+<div class="form-group">
+  <label class="form-label">Filter OTA Partner</label>
+  <div class="flex gap-2 flex-wrap" style="margin-top: 4px;">
+    <label class="ota-check-pill">
+      <input type="checkbox" checked />
+      <span>Traveloka</span>
+    </label>
+    <label class="ota-check-pill">
+      <input type="checkbox" checked />
+      <span>Tiket.com</span>
+    </label>
+    <label class="ota-check-pill">
+      <input type="checkbox" checked />
+      <span>Agoda</span>
+    </label>
+    <label class="ota-check-pill">
+      <input type="checkbox" checked class="check-lime" />
+      <span>⚡ Termasuk Bagasi & Pajak</span>
+    </label>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     9. Metasearch Field Box (Dedicated Travel Input)
+     ========================================================================== -->
+<div class="search-field" style="max-width: 360px;">
+  <div class="search-field-label">🛫 Dari Mana</div>
+  <input type="text" class="search-field-input" value="Jakarta (CGK)" placeholder="Kota / Bandara Asal" />
+  <div class="search-field-sub">Soekarno-Hatta Intl, Indonesia</div>
+</div>
+
+<!-- ==========================================================================
+     10. Segmented Toggle Switcher & Range Slider
+     ========================================================================== -->
+<div class="billing-toggle-box" style="margin-bottom: 16px;">
+  <button type="button" class="billing-btn active">Bulanan</button>
+  <button type="button" class="billing-btn">
+    Tahunan <span class="badge badge-coral" style="margin-left: 4px;">Hemat 35% 🔥</span>
+  </button>
+</div>
+
+<div style="max-width: 380px; padding: 16px; background: var(--bg-card); border: 2px solid var(--border-bold); border-radius: var(--radius-md); box-shadow: var(--shadow-pop-sm);">
+  <div class="flex justify-between items-center" style="font-size: 0.82rem; font-weight: 800;">
+    <span>Bujet Maksimal / Orang</span>
+    <span class="text-price" style="color: var(--coral);">Rp 2.500.000</span>
+  </div>
+  <input type="range" min="500000" max="10000000" step="250000" value="2500000" style="width: 100%; accent-color: var(--coral); margin-top: 8px; cursor: pointer;" />
+</div>

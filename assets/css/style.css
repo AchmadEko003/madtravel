@@ -707,6 +707,670 @@ button {
   font-size: 0.82rem;
 }
 
+/* ==========================================================================
+   Neo-Brutalist Form Controls (Text Fields, Textarea, Select & Date Picker)
+   ========================================================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-navy);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-label .req {
+  color: var(--coral);
+}
+
+.form-hint {
+  font-size: 0.76rem;
+  color: var(--text-slate);
+  margin-top: 2px;
+}
+
+.form-error-text {
+  font-size: 0.76rem;
+  color: var(--coral);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.form-control,
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop-sm);
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--text-navy);
+  transition: var(--transition-smooth);
+}
+
+.form-control::placeholder,
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.form-control:hover,
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover {
+  background: #FFFDF8;
+  border-color: var(--border-bold);
+}
+
+.form-control:focus,
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  background: #FFFFFF;
+  border-color: var(--border-bold);
+  box-shadow: var(--shadow-pop);
+  transform: translate(-1px, -1px);
+}
+
+.form-control:disabled,
+.form-input:disabled,
+.form-select:disabled,
+.form-textarea:disabled {
+  background: var(--bg-sand-alt);
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Validation States */
+.form-control.is-invalid,
+.form-input.is-invalid {
+  border-color: var(--coral);
+  box-shadow: 2px 2px 0px var(--coral);
+  background: var(--bg-coral-tint);
+}
+
+.form-control.is-valid,
+.form-input.is-valid {
+  border-color: var(--lime);
+  box-shadow: 2px 2px 0px var(--lime);
+  background: var(--bg-lime-tint);
+}
+
+/* Textarea */
+.form-textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Select Dropdown (Native) */
+.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%230F2942' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px 14px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.form-select option {
+  background: var(--bg-card);
+  color: var(--text-navy);
+  padding: 8px;
+}
+
+/* ==========================================================================
+   Neo-Brutalist Custom Floating Dropdown Menu (Non-Native)
+   ========================================================================== */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.custom-dropdown-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop-sm);
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text-navy);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.custom-dropdown-btn:hover {
+  background: #FFFDF8;
+  border-color: var(--border-bold);
+}
+
+.custom-dropdown.open .custom-dropdown-btn,
+.custom-dropdown-btn:focus-visible {
+  box-shadow: var(--shadow-pop);
+  transform: translate(-1px, -1px);
+  background: #FFFFFF;
+}
+
+.custom-dropdown-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  color: var(--text-navy);
+  font-size: 0.8rem;
+}
+
+.custom-dropdown.open .custom-dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 2.5px solid var(--border-bold);
+  border-radius: var(--radius-md);
+  box-shadow: 6px 8px 0px var(--border-bold);
+  padding: 8px;
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 280px;
+  overflow-y: auto;
+  animation: slideInDropdown 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.custom-dropdown.open .custom-dropdown-menu {
+  display: flex;
+}
+
+/* Searchable Select Search Box & Empty State */
+.dropdown-search-wrapper {
+  padding: 4px 4px 8px;
+  border-bottom: 2px dashed var(--border-color);
+  margin-bottom: 6px;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 2;
+}
+
+.dropdown-search-input {
+  width: 100%;
+  background: var(--bg-sand);
+  border: 2px solid var(--border-bold);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-navy);
+  transition: var(--transition-smooth);
+}
+
+.dropdown-search-input:focus {
+  background: #FFFFFF;
+  box-shadow: var(--shadow-pop-sm);
+  border-color: var(--border-bold);
+}
+
+.dropdown-empty-state {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  display: none;
+}
+
+.custom-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-navy);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1.5px solid transparent;
+}
+
+.custom-dropdown-item:hover {
+  background: var(--bg-sunny-tint);
+  border-color: var(--sunny-dark);
+  color: var(--text-navy);
+  transform: translateX(2px);
+}
+
+.custom-dropdown-item.selected {
+  background: var(--bg-ocean-tint);
+  color: var(--turquoise-dark);
+  border-color: var(--turquoise);
+  font-weight: 800;
+}
+
+.custom-dropdown-item .item-check {
+  display: none;
+  font-weight: 800;
+  color: var(--turquoise-dark);
+}
+
+.custom-dropdown-item.selected .item-check {
+  display: inline-block;
+}
+
+/* Date Input (Native Fallback) */
+input[type="date"].form-control,
+input[type="date"].form-input {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: contrast(1.2);
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background: var(--sunny);
+}
+
+/* ==========================================================================
+   Neo-Brutalist Custom Floating Datepicker & Date Range Picker
+   ========================================================================== */
+.custom-datepicker {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.datepicker-trigger-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop-sm);
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text-navy);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.datepicker-trigger-btn:hover {
+  background: #FFFDF8;
+  border-color: var(--border-bold);
+}
+
+.custom-datepicker.open .datepicker-trigger-btn,
+.datepicker-trigger-btn:focus-visible {
+  box-shadow: var(--shadow-pop);
+  transform: translate(-1px, -1px);
+  background: #FFFFFF;
+}
+
+.datepicker-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--bg-card);
+  border: 2.5px solid var(--border-bold);
+  border-radius: var(--radius-xl);
+  box-shadow: 6px 8px 0px var(--border-bold);
+  padding: 18px;
+  width: 320px;
+  z-index: 120;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideInDropdown 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-datepicker.open .datepicker-pop {
+  display: flex;
+}
+
+.datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed var(--border-color);
+}
+
+.datepicker-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-navy);
+}
+
+.datepicker-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sand);
+  border: 2px solid var(--border-bold);
+  box-shadow: var(--shadow-pop-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.datepicker-nav-btn:hover {
+  background: var(--sunny);
+  transform: scale(1.08);
+}
+
+.datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.datepicker-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.date-cell {
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-navy);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.date-cell:hover:not(.empty):not(.disabled) {
+  background: var(--bg-sunny-tint);
+  border-color: var(--sunny-dark);
+  transform: scale(1.08);
+}
+
+.date-cell.empty {
+  cursor: default;
+}
+
+.date-cell.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.date-cell.today {
+  border-color: var(--border-bold);
+}
+
+.date-cell.selected,
+.date-cell.range-start,
+.date-cell.range-end {
+  background: var(--coral) !important;
+  color: #FFFFFF !important;
+  border: 2px solid var(--border-bold) !important;
+  box-shadow: 2px 2px 0px var(--border-bold);
+  font-weight: 800;
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.date-cell.range-between {
+  background: var(--bg-coral-tint);
+  color: var(--coral);
+  border-radius: 0;
+  font-weight: 800;
+}
+
+.datepicker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 2px dashed var(--border-color);
+  font-size: 0.78rem;
+}
+
+.datepicker-presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.preset-chip {
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-sand);
+  border: 1.5px solid var(--border-bold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.preset-chip:hover {
+  background: var(--sunny);
+  transform: scale(1.05);
+}
+
+/* Input Group with Prefix / Icon / Addon */
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background: var(--sunny);
+  color: var(--text-navy);
+  border: 2px solid var(--border-bold);
+  font-weight: 800;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.input-addon.addon-left {
+  border-right: none;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  box-shadow: 0px 2px 0px var(--border-bold);
+}
+
+.input-addon.addon-right {
+  border-left: none;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  box-shadow: 2px 2px 0px var(--border-bold);
+}
+
+.input-group .form-control {
+  border-radius: 0;
+}
+
+.input-group .form-control:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.input-group .form-control:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.input-group:focus-within .input-addon {
+  box-shadow: var(--shadow-pop);
+}
+
+/* Radio Buttons Neo-Brutalist */
+input[type="radio"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0px var(--border-bold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  transition: var(--transition);
+  flex-shrink: 0;
+  margin: 0;
+  position: relative;
+}
+
+input[type="radio"]:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-bold);
+  background-color: var(--bg-sunny-tint);
+}
+
+input[type="radio"]:checked {
+  border-color: var(--border-bold);
+  background-color: var(--bg-card);
+}
+
+input[type="radio"]:checked::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+/* ==========================================================================
+   Neo-Brutalist Custom Checkboxes & OTA Filter Pills
+   ========================================================================== */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 19px;
+  height: 19px;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  border-radius: 6px;
+  box-shadow: 2px 2px 0px var(--border-bold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  transition: var(--transition);
+  flex-shrink: 0;
+  position: relative;
+  margin: 0;
+}
+
+input[type="checkbox"]:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border-bold);
+  background-color: var(--bg-sunny-tint);
+}
+
+input[type="checkbox"]:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0px 0px 0px var(--border-bold);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--turquoise);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  border-color: var(--border-bold);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px dashed var(--coral);
+  outline-offset: 2px;
+}
+
+/* Checkbox Color Modifiers */
+input[type="checkbox"].check-coral:checked {
+  background-color: var(--coral);
+}
+
+input[type="checkbox"].check-lime:checked {
+  background-color: var(--lime);
+}
+
+input[type="checkbox"].check-sunny:checked {
+  background-color: var(--sunny);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%230F2942' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5'/%3E%3C/svg%3E");
+}
+
 .ota-pills {
   display: flex;
   align-items: center;
@@ -717,19 +1381,36 @@ button {
 .ota-check-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 11px;
+  gap: 8px;
+  padding: 5px 12px;
   border-radius: var(--radius-pill);
-  background: var(--bg-sand-alt);
-  border: 1.5px solid var(--border-color);
+  background: var(--bg-card);
+  border: 2px solid var(--border-bold);
+  box-shadow: var(--shadow-pop-sm);
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
+  color: var(--text-navy);
   cursor: pointer;
   user-select: none;
+  transition: var(--transition);
 }
 
-.ota-check-pill input {
-  accent-color: var(--turquoise);
+.ota-check-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-pop);
+  background: var(--bg-sand-alt);
+}
+
+.ota-check-pill:has(input:checked) {
+  background: var(--bg-ocean-tint);
+  border-color: var(--border-bold);
+}
+
+.ota-check-pill input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  box-shadow: 1.5px 1.5px 0px var(--border-bold);
 }
 
 .ota-dot {

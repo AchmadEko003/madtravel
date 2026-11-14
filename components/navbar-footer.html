@@ -1,0 +1,115 @@
+<!-- ==========================================================================
+     Component: Navbar & Footer (Header Navigasi & Footer Lengkap)
+     Design System: Soft Neo-Brutalism & Tropical UI
+     Dependencies: assets/css/style.css, assets/js/app.js
+     ========================================================================== -->
+
+<!-- 1. Top Promo Status Bar -->
+<div class="top-promo-bar">
+  <div class="container top-promo-inner">
+    <div class="promo-ticker">
+      <span class="promo-pill">🔥 FITUR BARU</span>
+      <span>Bandingkan tiket pesawat & hotel dari 120+ OTA dalam satu layar!</span>
+    </div>
+    <div class="top-promo-utils">
+      <a href="price-alerts.html" style="color: var(--sunny); font-weight: 700;">🔔 2 Alert Harga Turun!</a>
+      <select class="util-select currency-selector" aria-label="Pilih Mata Uang">
+        <option value="IDR">🇮🇩 IDR (Rp)</option>
+        <option value="USD">🇺🇸 USD ($)</option>
+        <option value="SGD">🇸🇬 SGD (S$)</option>
+        <option value="MYR">🇲🇾 MYR (RM)</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Sticky Navbar -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="brand-logo">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+        </svg>
+      </div>
+      <span>MadTravel</span>
+      <span class="brand-tag">METASEARCH+</span>
+    </a>
+
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html" class="nav-link active">🌴 Beranda</a>
+      <a href="flights.html" class="nav-link">✈️ Tiket Pesawat</a>
+      <a href="hotels.html" class="nav-link">🏨 Hotel & Resort</a>
+      <a href="price-alerts.html" class="nav-link">
+        📈 Price Alert
+        <span class="nav-badge">PRO</span>
+      </a>
+      <a href="ai-planner.html" class="nav-link">🤖 AI Itinerary</a>
+      <a href="pricing.html" class="nav-link">💎 SaaS & API</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="price-alerts.html" class="btn btn-outline btn-sm">🔔 Pantau Harga</a>
+      <a href="pricing.html" class="btn btn-primary btn-sm">Coba Pro Gratis</a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Buka Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- 3. Multi-Column Footer -->
+<footer class="footer" style="margin-top: 40px;">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand-logo" style="color: white; margin-bottom: 14px;">
+          <div class="brand-icon">✈️</div>
+          <span>MadTravel</span>
+        </div>
+        <p style="color: #9FB6CD; font-size: 0.9rem; margin-bottom: 20px; max-width: 340px;">
+          Platform SaaS Travel Metasearch generasi baru. Bandingkan tiket pesawat, hotel, dan paket liburan dari 120+ OTA.
+        </p>
+        <div class="flex items-center gap-2">
+          <span class="badge badge-lime">🔒 SSL Encrypted</span>
+          <span class="badge badge-sunny">⚡ 99.98% Uptime API</span>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Mesin Metasearch</h4>
+        <div class="footer-links">
+          <a href="flights.html">Bandingkan Tiket Pesawat</a>
+          <a href="hotels.html">Perbandingan Harga Hotel</a>
+          <a href="price-alerts.html">Kalender Harga Termurah</a>
+          <a href="ai-planner.html">AI Smart Trip Planner</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Fitur SaaS & B2B</h4>
+        <div class="footer-links">
+          <a href="price-alerts.html">WhatsApp & Telegram Fare Alert</a>
+          <a href="pricing.html">Langganan Nomad Pro</a>
+          <a href="pricing.html#b2b-widget">White-Label Widget</a>
+          <a href="coming-soon.html">Status Peluncuran 2.0</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Partner OTA</h4>
+        <div class="footer-links">
+          <a href="flights.html">Traveloka & Tiket.com</a>
+          <a href="hotels.html">Agoda & Booking.com</a>
+          <a href="flights.html">Trip.com & Garuda Indonesia</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 PT MadTravel Teknologi Nusantara. Seluruh hak cipta dilindungi.</div>
+      <div class="flex gap-4">
+        <a href="pricing.html">Syarat & Ketentuan</a>
+        <a href="pricing.html">Kebijakan Privasi</a>
+      </div>
+    </div>
+  </div>
+</footer>

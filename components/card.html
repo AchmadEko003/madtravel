@@ -1,0 +1,73 @@
+<!-- ==========================================================================
+     Component: Cards & Containers (Kartu Konten & Bento Grid)
+     Design System: Soft Neo-Brutalism & Tropical UI
+     Dependencies: assets/css/style.css
+     ========================================================================== -->
+
+<!-- 1. Basic Soft Shadow Card -->
+<div class="card">
+  <h3 class="title-h3">Kartu Standar</h3>
+  <p style="color: var(--text-slate); font-size: 0.92rem; margin-top: 6px;">
+    Container serbaguna dengan bayangan lembut dan sudut membulat 24px.
+  </p>
+</div>
+
+<!-- 2. Tactile Neo-Brutalist Pop Card (Hover Lift & Hard Shadow) -->
+<div class="card-pop">
+  <span class="badge badge-pop badge-sunny" style="margin-bottom: 8px;">POP BRUTALISM</span>
+  <h3 class="title-h2">Kartu Taktil Interaktif</h3>
+  <p style="color: var(--text-slate); font-size: 0.95rem; margin-top: 6px;">
+    Memiliki border 2px solid navy dan bayangan tegas 4px 4px yang naik saat di-hover.
+  </p>
+</div>
+
+<!-- 3. Destination Card with Art Gradient & Multi-OTA Comparison -->
+<article class="dest-card" style="max-width: 380px;">
+  <div class="dest-art" style="background: linear-gradient(135deg, #00B4A2 0%, #059669 100%); color: white;">
+    <div class="flex justify-between items-start">
+      <span class="badge badge-pop badge-sunny">🔥 Turun 21%</span>
+      <span style="background: rgba(15,41,66,0.5); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">⭐ 4.9 (12.4rb)</span>
+    </div>
+    <div>
+      <div style="font-size: 2.2rem; line-height: 1;">🏝️🍹</div>
+      <h3 class="title-h3" style="color: white; margin-top: 6px;">Canggu & Uluwatu, Bali</h3>
+      <p style="font-size: 0.82rem; opacity: 0.9;">Pantai tropis & beach club terbaik</p>
+    </div>
+  </div>
+  <div class="dest-body">
+    <div>
+      <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+        <span>✈️ Tiket PP + 🏨 Hotel 3M</span>
+        <span style="color: var(--lime-dark); font-weight: 800;">Hemat Rp 420rb</span>
+      </div>
+      <div class="ota-mini-list">
+        <div class="flex justify-between items-center" style="font-size: 0.82rem; font-weight: 700;">
+          <span class="ota-badge ota-tiket">Tiket.com</span>
+          <span class="text-price" style="color: var(--lime-dark);">Rp 1.890.000</span>
+        </div>
+        <div class="flex justify-between items-center" style="font-size: 0.8rem; color: var(--text-slate);">
+          <span class="ota-badge ota-traveloka">Traveloka</span>
+          <span class="text-price">Rp 2.050.000</span>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between gap-2" style="margin-top: 10px;">
+      <button type="button" class="btn btn-turquoise btn-sm" style="flex: 1;">Lihat Deal ➔</button>
+      <button type="button" class="btn btn-outline btn-sm" title="Pasang Alert">🔔</button>
+    </div>
+  </div>
+</article>
+
+<!-- 4. Bento Feature Card (Modular Tinted) -->
+<div class="bento-card" style="background: var(--bg-ocean-tint); max-width: 420px;">
+  <div>
+    <span class="badge badge-pop badge-sunny" style="margin-bottom: 12px;">BENTO GRID</span>
+    <h3 class="title-h2">Deteksi Error Fare 24/7</h3>
+    <p style="color: var(--text-slate); font-size: 0.92rem; margin-top: 6px;">
+      Bot kami memindai 120+ OTA secara real-time dan mengirimkan notifikasi saat harga anjlok.
+    </p>
+  </div>
+  <div style="margin-top: 20px;">
+    <button type="button" class="btn btn-primary btn-sm" style="width: 100%;">Aktifkan Radar ➔</button>
+  </div>
+</div>
