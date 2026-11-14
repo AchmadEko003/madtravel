@@ -68,6 +68,9 @@ Berbeda dengan *Neo-Brutalism* kaku yang menggunakan sudut tajam dan warna hitam
    - **3-Tier SaaS Pricing:** Paket *Explorer Free*, *Nomad Pro (B2C)*, dan *B2B Partner & API* dengan toggle tagihan Bulanan/Tahunan (Hemat 35%).
    - **B2B White-Label Widget Customizer:** Ubah nama brand agen travel dan warna tema widget secara *live*, hitung potensi komisi afiliasi bulanan melalui slider trafik pengunjung, dan salin kode embed HTML.
 
+7. **🚀 Coming Soon (`coming-soon.html`)**
+   - Halaman *standalone* minimalis tanpa *header/footer* dengan kartu **Soft Neo-Brutalism** di tengah layar.
+
 ---
 
 ## 📂 Struktur Direktori
@@ -80,6 +83,7 @@ madtravel/
 ├── price-alerts.html       # SaaS Price Alert Dashboard & SVG History Chart
 ├── ai-planner.html         # AI Smart Trip Planner & Budget Breakdown
 ├── pricing.html            # SaaS Subscription Tiers & B2B White-Label Studio
+├── coming-soon.html        # Minimalist Coming Soon Page
 ├── README.md               # Dokumentasi Proyek & Panduan Design System
 └── assets/
     ├── css/
